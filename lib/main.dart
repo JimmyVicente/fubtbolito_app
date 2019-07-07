@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'home/bottomNavigation.dart';
-import 'login/loginPage.dart';
+import 'package:futbolito_app/pages/home/bottomNavigation.dart';
+import 'package:futbolito_app/pages/signin/signin.dart';
+import 'package:futbolito_app/pages/splashScreen.dart';
 
 void main() => runApp(MyApp());
 
+
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Futbolito App',
+      title: 'Inicio de sesión',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: BottomNavigation(),
+      theme: ThemeData(fontFamily: 'Montserrat'),
+      routes: {
+        '/':(context)=> SplashScreen(),
+        '/signin':(context)=> SignInPageWidget(),
+        '/home':(contex)=> BottomNavigation()
+      },
     );
   }
 }
