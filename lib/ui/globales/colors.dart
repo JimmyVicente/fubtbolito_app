@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class Colores {
   static final primaryColor = Color.fromRGBO(14, 171, 128,1) ;
   static final primaryLightColor =Color.fromRGBO(172, 236, 100,1) ;
-  static final colorPrimaryDark = Color.fromRGBO(0, 34, 73,0) ;
+  static final colorStart= Color.fromRGBO(248, 216, 3, 1) ;
   static final primaryTextColor = Color.fromRGBO(0, 34, 73,0);
   static final colorAccent= Color.fromRGBO(0, 34, 73,0);
   static final colorFondo= Color.fromRGBO(0, 34, 73,0);

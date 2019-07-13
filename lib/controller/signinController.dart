@@ -10,7 +10,7 @@ class signinController {
 
   BaseApi _baseApi = new BaseApi();
 
-  static String url= Comunication.IP_CONEXION+'/users/';
+  static String Url= Comunication.IP_CONEXION+'/users/';
 
   static final Map<String, String> headers = {
     "content-type": "application/json",
@@ -30,11 +30,11 @@ class signinController {
   Future<dynamic> verificarInicio(String user, String password) async{
     final coneccionInternet = await Fuctions().verificarConecionInternet();
     if(coneccionInternet){
-
+      String url='';
       if(Fuctions().verificarCorreo(user)){
-        url= url+'?email=';
+        url= Url+'?email=';
       }else{
-        url= url+'?username=';
+        url= Url+'?username=';
       }
       final response = await _baseApi.get(url+user);
       if(response['count']!=0){

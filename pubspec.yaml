@@ -9,12 +9,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_cupertino_localizations: ^1.0.1
   google_maps_flutter: ^0.5.13
   crypto: ^2.0.6
   cupertino_icons: ^0.1.2
   http: any
   shared_preferences: ^0.5.3+1
   font_awesome_flutter: ^8.4.0
+  intl: ^0.15.8
+
 
 dev_dependencies:
   flutter_test:

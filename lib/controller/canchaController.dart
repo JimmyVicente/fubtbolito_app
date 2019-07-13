@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:futbolito_app/controller/base_api.dart';
 import 'package:futbolito_app/controller/comunication.dart';
 
@@ -31,6 +33,23 @@ class canchaController {
     } else {
       return null;
     }
+  }
+
+  Future<DateTime> selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      locale: Locale('es'),
+      firstDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      lastDate: DateTime(DateTime.now().year+3),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.fallback(),
+          child: child,
+        );
+      },
+    );
+    return picked;
   }
 
 }

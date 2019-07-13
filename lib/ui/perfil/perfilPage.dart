@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
+import 'package:futbolito_app/ui/globales/widget.dart';
 import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
 import 'package:futbolito_app/ui/signin/ui/hidden_scroll_behavior.dart';
 
@@ -29,8 +30,8 @@ class _perfilPage extends State<perfilPage> {
         title: Text('PERFIL')
     );
     var imagePerfil =Container(
-        height: 80,
-        width: 80,
+        height: 100,
+        width: 100,
         decoration: BoxDecoration(
           gradient: Colores.primaryGradient,
           borderRadius: BorderRadius.circular(50),
@@ -40,12 +41,41 @@ class _perfilPage extends State<perfilPage> {
           margin: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/user.png'),
+                image: AssetImage('assets/images/home.jpg'),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(50)
           ),
         )
+    );
+
+    var nameUser= Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Text(
+        user['first_name']+' '+user['last_name'],
+        style: TextStyle(color: Colors.grey[300],
+            fontSize: 30
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+    var usernameUser= Container(
+      margin: EdgeInsets.only(top: 1),
+      child: Text(
+        user['username'],
+        style: TextStyle(
+            color: Colors.grey,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+    var emailUser= Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Text(
+        user['email'],
+        style: TextStyle(color: Colors.grey[300]),
+        textAlign: TextAlign.center,
+      ),
     );
 
  
@@ -54,14 +84,9 @@ class _perfilPage extends State<perfilPage> {
         child: Column(
           children: <Widget>[
             imagePerfil,
-            Container(
-              margin: EdgeInsets.only(top: 27.5),
-              child: Text(
-                user['email'],
-                style: TextStyle(color: Colors.grey[300]),
-                textAlign: TextAlign.center,
-              ),
-            ),
+            nameUser,
+            usernameUser,
+            emailUser
           ],
         ),
     );
@@ -150,10 +175,7 @@ class _perfilPage extends State<perfilPage> {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          BlurBackground(
-            assetImage: 'assets/images/home.jpg',
-            backDropColor: Colors.black.withOpacity(0.5),
-          ),
+          Widgets.wallpaper,
           Center(
             child: ScrollConfiguration(
               behavior: HiddenScrollBehavior(),

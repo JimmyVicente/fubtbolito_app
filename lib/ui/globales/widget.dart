@@ -1,9 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
 
 import 'colors.dart';
 
 class Widgets  {
+
+  static Widget wallpaper = BlurBackground(
+    assetImage: 'assets/images/home.jpg',
+    backDropColor: Colors.black.withOpacity(0.1),
+    blurX: 0.5,
+    blurY: 0.5,
+  );
+
   void showAlert(BuildContext context, String title, Function function) {
     showDialog(
       context: context,
