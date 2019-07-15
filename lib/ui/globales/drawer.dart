@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/about/aboutPage.dart';
 import 'package:futbolito_app/controller/signinController.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
@@ -9,9 +8,8 @@ import 'package:futbolito_app/ui/perfil/perfilPage.dart';
 
 
 class DrawerPage {
-  static var user=User.user;
   @override
- static Widget drawer(BuildContext context) {
+ static Widget drawer(BuildContext context, Map userPercistence) {
     
     closedSession(){
       signinController().clearSesion();
@@ -31,21 +29,21 @@ class DrawerPage {
                 )
             ),
             currentAccountPicture: CircleAvatar(
-              child: Text(user['first_name'][0],
+              child: Text(userPercistence['first_name'][0],
                 style: TextStyle(
                     fontSize: 45.0
                 ),
               ),
             ),
-            accountName: Text(user['first_name']+ ' '+ user['last_name']),
-            accountEmail: Text(user['email']),
+            accountName: Text(userPercistence['first_name']+ ' '+ userPercistence['last_name']),
+            accountEmail: Text(userPercistence['email']),
           ),
           ListTile(
             leading: Icon(Icons.account_circle),
             title: Text("Perfil"),
             onTap: (){
               Navigator.push(context, CupertinoPageRoute(
-                  builder: (BuildContext context) => perfilPage()
+                  builder: (BuildContext context) => perfilPage(userPercistence)
               ));
             },
           ),

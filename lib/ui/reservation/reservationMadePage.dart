@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:futbolito_app/controller/reservaController.dart';
-import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
-import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
-import 'package:futbolito_app/ui/signin/ui/hidden_scroll_behavior.dart';
-
-import '../f.dart';
+import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 
 class ReservationMadePage extends StatefulWidget {
   @override
@@ -17,13 +13,9 @@ class ReservationMadePage extends StatefulWidget {
 class _ReservationMadePageState extends State<ReservationMadePage> {
 
 
-
-  var user;
-
   @override
   void initState() {
     super.initState();
-    user=User.user;
   }
 
   @override
@@ -91,16 +83,6 @@ class _ReservationMadePageState extends State<ReservationMadePage> {
                 rowTitleTable('VALOR UNITARIO'),
                 rowTitleTable('VALOR TOTAL'),
               ]),
-          TableRow(
-              children: [
-                rowBodyTable(data['fecha_reserva'].toString()),
-                rowBodyTable(data['cancha'].toString()),
-                rowBodyTable(data['hora_inicio'].toString()),
-                rowBodyTable(data['hora_fin'].toString()),
-                rowBodyTable(data['valor_unitario'].toString()),
-                rowBodyTable(data['valor_total'].toString()),
-              ]
-          ),
           TableRow(
               children: [
                 rowBodyTable(data['fecha_reserva'].toString()),

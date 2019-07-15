@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:futbolito_app/controller/signinController.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
-import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
-import 'package:futbolito_app/ui/signin/ui/hidden_scroll_behavior.dart';
+import 'package:futbolito_app/ui/globales/ui/blur_background.dart';
+import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 import 'package:futbolito_app/ui/signup/signup.dart';
 
 import 'forgot_password.dart';
@@ -133,11 +133,11 @@ class _SignInPageWidgetState extends State<SignInPageWidget> with signinControll
           if (_formKey.currentState.validate()) {
             Widgets().showDialogLoading(context);
             final response = await verificarInicio(controllerUser.text, controllerPassword.text);
-            if(response == 'logeado'){
+            if(response['url'] != null){
               verificarLogeado(context);
             }else{
               setState(() {
-                mensaje = response;
+                mensaje = response.toString();
               });
             }
             Navigator.of(context, rootNavigator: true).pop();

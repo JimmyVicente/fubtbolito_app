@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:futbolito_app/controller/base_api.dart';
 import 'package:futbolito_app/controller/comunication.dart';
 
@@ -35,10 +36,10 @@ class canchaController {
     }
   }
 
-  Future<DateTime> selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+  Future<DateTime> selectDate(BuildContext context, DateTime selectedDate) async {
+    final DateTime date = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: selectedDate,
       locale: Locale('es'),
       firstDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
       lastDate: DateTime(DateTime.now().year+3),
@@ -49,7 +50,9 @@ class canchaController {
         );
       },
     );
-    return picked;
+    return date;
   }
+
+
 
 }

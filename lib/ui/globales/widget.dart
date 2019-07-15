@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:futbolito_app/ui/globales/ui/blur_background.dart';
 
 import 'colors.dart';
 
@@ -12,6 +15,34 @@ class Widgets  {
     blurX: 0.5,
     blurY: 0.5,
   );
+
+  static Widget GoogleMaps(String titleMarker, double latitude, double longitude){
+    Completer<GoogleMapController> _controller = Completer();
+    void _onMapCreated(GoogleMapController controller) {
+      _controller.complete(controller);
+    }
+
+    final googleMaps = GoogleMap(
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+        target:  LatLng(latitude, longitude),
+        zoom: 16.5,
+      ),
+      myLocationEnabled: true,
+      markers:{
+        Marker(
+          markerId: MarkerId('1'),
+          position:  LatLng(latitude, longitude),
+          infoWindow: InfoWindow(
+              title: titleMarker,
+              snippet: 'Click a la direccion para llegar'
+          ),
+          icon: BitmapDescriptor.defaultMarker,
+        )
+      },
+    );
+    return googleMaps;
+  }
 
   void showAlert(BuildContext context, String title, Function function) {
     showDialog(

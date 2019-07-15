@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:futbolito_app/controller/reservaController.dart';
-import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/drawer.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
 import 'package:futbolito_app/ui/reservation/reservationMadePage.dart';
-import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
-import 'package:futbolito_app/ui/signin/ui/hidden_scroll_behavior.dart';
-
-import '../f.dart';
-
+import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 class ReservationPage extends StatefulWidget {
+  final userPercistence;
+  ReservationPage(this.userPercistence);
+
   @override
   _ReservationPageState createState() => _ReservationPageState();
 }
@@ -24,17 +21,6 @@ class _ReservationPageState extends State<ReservationPage> {
         backgroundColor: Colores.primaryColor,
         centerTitle: true,
         title: Text('RESERVAS')
-    );
-    final btn= Container(
-      margin: EdgeInsets.only(top: 20),
-      child: RaisedButton(
-        child: Text('VISTA DE TABLA'),
-        onPressed: (){
-          Navigator.push(context, CupertinoPageRoute(
-              builder: (BuildContext context)=> DataTableDemo()
-          ));
-        },
-      ),
     );
     final btnReservationMade=Container(
       margin: EdgeInsets.only(bottom: 10, top: 10),
@@ -76,7 +62,7 @@ class _ReservationPageState extends State<ReservationPage> {
     );
     return Scaffold(
       appBar: _appBar,
-      drawer: DrawerPage.drawer(context),
+      drawer: DrawerPage.drawer(context, widget.userPercistence),
       body: Stack(
         children: [
           Widgets.wallpaper,
@@ -123,16 +109,6 @@ class _ReservationPageState extends State<ReservationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'EVENTOS PÚBLICOS',
-                style: TextStyle(
-                    color: Colores.primaryColor,
-                    fontWeight: FontWeight.w100,
-                    fontSize: 12),
-              ),
-            ),
             Container(
               alignment: Alignment.centerLeft,
               child: Text(_title,style: TextStyle(color: Colores.primaryColor, fontSize: 15),),

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:futbolito_app/controller/signinController.dart';
 import 'package:futbolito_app/controller/userController.dart';
-import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,9 +15,6 @@ class _SplashScreenState extends State<SplashScreen> with signinController{
     var dataUserpersistence = await signinController().loadSesion();
     if(dataUserpersistence !=null){
       var dataUser = await userController().getDataUser();
-      setState(() {
-        User.user = dataUser;
-      });
     }
     verificarLogeado(context);
   }

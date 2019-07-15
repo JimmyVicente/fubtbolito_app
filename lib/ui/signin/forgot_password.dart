@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
-import 'package:futbolito_app/ui/signin/ui/hidden_scroll_behavior.dart';
+import 'package:futbolito_app/ui/globales/ui/blur_background.dart';
+import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 class ForgotPasswordPageWidget extends StatelessWidget {
 
   @override

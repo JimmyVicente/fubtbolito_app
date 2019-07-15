@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/controller/base_api.dart';
 import 'package:futbolito_app/controller/comunication.dart';
 import 'package:futbolito_app/controller/Fuctions.dart';
+import 'package:futbolito_app/controller/userController.dart';
+import 'package:futbolito_app/ui/globales/bottomNavigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class signinController {
@@ -42,9 +43,8 @@ class signinController {
         String passwordImput= Fuctions().toSha256(password+ Fuctions().toMd5(password));
         if(passwordResponse==passwordImput){
           insertLoginPreferences(response['results'][0]);
-          User.user = response['results'][0];
           if(loadSesion!=null){
-            return 'logeado';
+            return response['results'][0];
           }else{
             return 'Algo salio mal';
           }
@@ -93,7 +93,11 @@ class signinController {
   Future<void> verificarLogeado(BuildContext context) async{
     var UserPercistence = await loadSesion();
     if(UserPercistence!=null){
-      Navigator.of(context).pushReplacementNamed('/home');
+     userController().getDataUser(); //metodo para ver datos de internet o preferens
+      Navigator.of(context).pushReplacement(
+          CupertinoPageRoute(
+              builder: (BuildContext context)=> BottomNavigation(UserPercistence)
+          ));
     }else{
       Navigator.of(context).pushReplacementNamed('/signin');
     }

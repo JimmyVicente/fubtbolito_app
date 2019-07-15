@@ -1,8 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
-import 'package:futbolito_app/ui/signin/ui/hidden_scroll_behavior.dart';
+import 'package:futbolito_app/controller/signinController.dart';
+import 'package:futbolito_app/controller/signupController.dart';
+import 'package:futbolito_app/ui/globales/ui/blur_background.dart';
+import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
+import 'package:futbolito_app/ui/globales/widget.dart';
 
 
 class SignUpPageWidget extends StatefulWidget {
@@ -17,7 +20,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
   TextEditingController controllerEmail = new TextEditingController();
   TextEditingController controllerUser = new TextEditingController();
   TextEditingController controllerPassword = new TextEditingController();
+  RegExp emailRegExp = new RegExp(r'^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$');
   bool passwordObscureText=true;
+  String mensaje="";
 
   void _goToSignIn(BuildContext context) {
     Navigator.pop(context);
@@ -92,6 +97,8 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
             return "Escriba su correo";
           } else if (text.length <= 3) {
             return "Escriba al menos 4 caracteres";
+          }else if(!emailRegExp.hasMatch(text)){
+            return "Escriba un correo valido";
           }
           return null;
         },
@@ -170,7 +177,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
         obscureText: passwordObscureText,
       ),
     );
-
     var textFormFiel=Container(
       child: Form(
         key: _formKey,
@@ -189,7 +195,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
         ),
       ),
     );
-
+    var errorMessage=Container(
+        margin: EdgeInsets.only(bottom: 30),
+        child: Text(mensaje, style: TextStyle(color: Colors.red),)
+    );
     var signUpButton = Container(
       height: 55,
       child: FlatButton(
@@ -205,9 +214,28 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
           "Regístrate",
           textAlign: TextAlign.center,
         ),
-        onPressed: () {
+        onPressed: () async{
           if (_formKey.currentState.validate()) {
-            print('todo correcto');
+            Widgets().showDialogLoading(context);
+            final response = await registerController().postSignup(
+                controllerFirstName.text,
+                controllerLastname.text,
+                controllerUser.text,
+                controllerEmail.text,
+                controllerPassword.text
+            );
+            if(response=='registrado'){
+              final responseSignin = await signinController().verificarInicio(controllerUser.text, controllerPassword.text);
+              if(responseSignin['url'] != null){
+                Navigator.pop(context);
+                signinController().verificarLogeado(context);
+              }
+            }else {
+              setState(() {
+                mensaje = response.toString();
+              });
+            }
+            Navigator.of(context, rootNavigator: true).pop();
           }
         },
       ),
@@ -264,6 +292,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                 padding: EdgeInsets.all(20),
                 children: [
                   textFormFiel,
+                  errorMessage,
                   signUpButton,
                   alreadyHaveAnAccount
                 ],

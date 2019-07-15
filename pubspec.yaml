@@ -18,6 +18,7 @@ dependencies:
   http: any
   shared_preferences: ^0.5.3+1
   font_awesome_flutter: ^8.4.0
+  flutter_datetime_picker: ^1.2.5
   intl: ^0.15.8
 
 

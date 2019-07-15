@@ -1,59 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
-import 'package:futbolito_app/ui/signin/ui/blur_background.dart';
-import 'package:futbolito_app/ui/signin/ui/hidden_scroll_behavior.dart';
+import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 
 class perfilPage extends StatefulWidget {
+  final userPercistence;
+  perfilPage(this.userPercistence);
+
   @override
   _perfilPage createState() => _perfilPage();
 }
 
 class _perfilPage extends State<perfilPage> {
-  
-  var user;
-
-  @override
-  void initState() {
-    super.initState();
-    user=User.user;
-  }
 
   @override
   Widget build(BuildContext context) {
-    
-    final _appBar=  AppBar(
-        backgroundColor: Colores.primaryColor,
-        centerTitle: true,
-        title: Text('PERFIL')
+    final _image= Container(
+        height: 210,
+        width: MediaQuery.of(context).size.width,
+        decoration:  BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/trees.jpg'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.1), BlendMode.luminosity)
+            )
+        ),
+        child: Stack(
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.white,),
+                  onPressed: (){
+                    Navigator.pop(context);
+                  }
+              ),
+            ]
+        )
     );
     var imagePerfil =Container(
-        height: 100,
-        width: 100,
-        decoration: BoxDecoration(
-          gradient: Colores.primaryGradient,
-          borderRadius: BorderRadius.circular(50),
-          border: Border.all(color: Colores.primaryColor),
-        ),
-        child: Container(
-          margin: EdgeInsets.all(5.0),
+      alignment: Alignment.topCenter,
+      margin: EdgeInsets.only( top: 120),
+      child: Container(
+          height: 100,
+          width: 100,
           decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/home.jpg'),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(50)
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(color: Colors.green[500], width: 2),
+            color: Colors.blue
           ),
-        )
+          padding: EdgeInsets.all(2),
+          child: CircleAvatar(
+            backgroundColor: Colors.blue,
+            backgroundImage: AssetImage('assets/images/user.png'),
+          ),
+      ),
     );
 
     var nameUser= Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
-        user['first_name']+' '+user['last_name'],
-        style: TextStyle(color: Colors.grey[300],
+        widget.userPercistence['first_name']+' '+widget.userPercistence['last_name'],
+        style: TextStyle(color: Colores.primaryColor,
             fontSize: 30
         ),
         textAlign: TextAlign.center,
@@ -62,134 +69,61 @@ class _perfilPage extends State<perfilPage> {
     var usernameUser= Container(
       margin: EdgeInsets.only(top: 1),
       child: Text(
-        user['username'],
+        widget.userPercistence['username'],
         style: TextStyle(
             color: Colors.grey,
         ),
         textAlign: TextAlign.center,
       ),
     );
-    var emailUser= Container(
+    final emailUser= Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
-        user['email'],
-        style: TextStyle(color: Colors.grey[300]),
+        widget.userPercistence['email'],
+        style: TextStyle(color: Colors.blue),
         textAlign: TextAlign.center,
       ),
     );
-
- 
-
-    var ColumnStyle=Container(
-        child: Column(
-          children: <Widget>[
-            imagePerfil,
-            nameUser,
-            usernameUser,
-            emailUser
-          ],
-        ),
-    );
- 
-    var signInButton = Container(
-      height: 55,
-      child: FlatButton(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(27.5),
-          ),
-        ),
-        textColor: Colors.deepOrange,
-        padding: EdgeInsets.all(0),
-        child: Text(
-          "Iniciar Sesión",
-          textAlign: TextAlign.center,
-        ),
-        onPressed: () async{
-
-        },
-      ),
-    );
-
-    var forgotPassword = Container(
-      height: 16,
-      margin: EdgeInsets.only(top: 18),
-      child: FlatButton(
-        onPressed: (){
-
-        },
-        textColor: Colors.white,
-        padding: EdgeInsets.all(0),
-        child: Text(
-          "Olvidé contraseña ?",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontWeight: FontWeight.bold
-          ),
-        ),
-      ),
-    );
-
-
-
-    var dontHaveAnAccount = Container(
-      margin: EdgeInsets.only(top: 26),
-      height: 17,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "¿No tienes una cuenta?",
-                  style: TextStyle(
-                      color: Colors.grey[300],
-                      fontSize: 12
-                  ),
-                ),
-              )
-          ),
-          Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: FlatButton(
-                    child: Text(
-                      'Regístrate',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    textColor: Colors.white,
-                    onPressed: (){
-
-                    }
-                ),
-              )
-          )
-        ],
-      ),
+    final _body =Container(
+        padding: EdgeInsets.only(right: 10, left: 10, top: 180 , bottom: 10),
+        child: Card(
+            child: Container(
+              height: 300,
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(10.0),
+              margin: EdgeInsets.only(top:20),
+              child: Column(
+                children: <Widget>[
+                  nameUser,
+                  emailUser,
+                  usernameUser
+                ],
+              ),
+            )
+        )
     );
 
     return Scaffold(
-      appBar: _appBar,
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Widgets.wallpaper,
-          Center(
-            child: ScrollConfiguration(
-              behavior: HiddenScrollBehavior(),
-              child: ListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.all(20),
-                children: [
-                  ColumnStyle,
-                ],
-              ),
-            ),
+        body: SafeArea(
+          child: Stack(
+              children: [
+                Widgets.wallpaper,
+                Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(
+                        children: <Widget>[
+                          _image,
+                          _body,
+                          imagePerfil,
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ]
           ),
-        ],
-      ),
+        )
     );
   }
 }

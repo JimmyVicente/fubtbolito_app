@@ -16,7 +16,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/':(context)=> SplashScreen(),
         '/signin':(context)=> SignInPageWidget(),
-        '/home':(contex)=> BottomNavigation()
       },
     );
   }
