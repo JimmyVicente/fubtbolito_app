@@ -4,6 +4,8 @@ import 'package:futbolito_app/controller/signinController.dart';
 import 'package:futbolito_app/controller/base_api.dart';
 import 'package:futbolito_app/controller/Fuctions.dart';
 
+import 'comunication.dart';
+
 class userController extends Fuctions{
 
   BaseApi _baseApi = new BaseApi();
@@ -26,7 +28,10 @@ class userController extends Fuctions{
     var dataUserPersistence = await signinController().loadSesion();
     var coneccion= await verificarConecionInternet();
     if(coneccion){
-        var response = await _baseApi.get(dataUserPersistence['url'].toString());
+      var afterIp=dataUserPersistence['url'].toString();
+      var Ip='http://'+Comunication.IP+afterIp.substring(21);
+      print(Ip);
+      var response = await _baseApi.get(Ip);
         signinController().insertLoginPreferences(response);
         return response;
     }else{

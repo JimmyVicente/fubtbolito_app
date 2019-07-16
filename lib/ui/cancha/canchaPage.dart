@@ -404,7 +404,7 @@ class _CanchaPageState extends State<CanchaPage> {
                   _TextTitleValor,
                   _ImputValor,
                   _TextTitleLocationComplejo,
-                  Expanded(flex:2,child: Widgets.GoogleMaps(widget.Complejo['nombre_complejo'], -4.009644, -79.203737)),
+                  Expanded(child: Widgets.GoogleMaps(widget.Complejo['nombre_complejo'], -4.009644, -79.203737)),
                 ],
               ),
             )

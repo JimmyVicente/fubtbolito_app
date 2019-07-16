@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_cupertino_localizations/flutter_cupertino_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:futbolito_app/ui/reservation/reservationPage.dart';
 import 'package:futbolito_app/ui/event/eventPage.dart';

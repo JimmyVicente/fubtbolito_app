@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
   Widget Complejo(String _image, Map data){
-
     final startPaint= Expanded(
       child: Icon(
         FontAwesomeIcons.solidStar,
@@ -126,6 +125,7 @@ class _HomePageState extends State<HomePage> {
         children: stars
       ),
     );
+
     final _Phone= Container(
       margin: EdgeInsets.only(top: 10),
       child: Row(

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Fuctions{
 
@@ -59,6 +60,24 @@ class Fuctions{
     }else{
       return true;
     }
+  }
+
+  insertIpPreferences(String ip) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('ip', ip);
+  }
+
+  Future<String> getIp() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ip = prefs.getString('ip') ?? null;
+    return ip;
+  }
+
+  clearIp() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('ip');
+    String sesion =prefs.getString('ip') ?? null;
+    return sesion;
   }
 
 }
