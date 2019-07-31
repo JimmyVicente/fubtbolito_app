@@ -28,6 +28,7 @@ class registerController{
     });
   }
 
+  
   Future<String> postSignup(String firstName, String lastName,String username, String email, String contrasenia) async {
     var parameters= json.encode({
       "first_name": firstName,
