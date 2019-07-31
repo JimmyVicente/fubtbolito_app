@@ -35,8 +35,9 @@ class Widgets  {
           position:  LatLng(latitude, longitude),
           infoWindow: InfoWindow(
               title: titleMarker,
-              snippet: 'Click a la direccion para llegar'
+              snippet: 'Ver en Google Maps |->',
           ),
+
           icon: BitmapDescriptor.defaultMarker,
         )
       },

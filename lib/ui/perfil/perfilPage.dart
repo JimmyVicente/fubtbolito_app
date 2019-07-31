@@ -4,6 +4,8 @@ import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
 import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 
+import 'PerfilWidget.dart';
+
 class perfilPage extends StatefulWidget {
   final userPercistence;
   perfilPage(this.userPercistence);
@@ -76,7 +78,7 @@ class _perfilPage extends State<perfilPage> {
         textAlign: TextAlign.center,
       ),
     );
-    final emailUser= Container(
+    var emailUser= Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
         widget.userPercistence['email'],
@@ -84,7 +86,17 @@ class _perfilPage extends State<perfilPage> {
         textAlign: TextAlign.center,
       ),
     );
-    final _body =Container(
+    var btnEdit= Container(
+      margin: EdgeInsets.only(top: 10),
+      child: RaisedButton.icon(
+          icon: Icon(Icons.edit),
+          label: Text('Editar Perfil'),
+          onPressed: (){
+            _editPerfil();
+          }
+      ),
+    );
+    var _body =Container(
         padding: EdgeInsets.only(right: 10, left: 10, top: 180 , bottom: 10),
         child: Card(
             child: Container(
@@ -96,7 +108,8 @@ class _perfilPage extends State<perfilPage> {
                 children: <Widget>[
                   nameUser,
                   emailUser,
-                  usernameUser
+                  usernameUser,
+                  btnEdit
                 ],
               ),
             )
@@ -125,5 +138,9 @@ class _perfilPage extends State<perfilPage> {
           ),
         )
     );
+  }
+
+  void _editPerfil() {
+    PerfilWidget().showCambiarPerfil(context, widget.userPercistence);
   }
 }

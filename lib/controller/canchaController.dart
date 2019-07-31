@@ -10,24 +10,11 @@ class canchaController {
   BaseApi _baseApi = new BaseApi();
 
   static final url= Comunication.IP_CONEXION+'/canchas/?complejo=';
+  static final headerGet= Comunication.headersGet;
 
-  static final Map<String, String> headers = {
-    "content-type": "application/json",
-    "accept": "application/json",
-  };
-
-
-  parameters(String usuario){
-    return json.encode({
-      "username": "",
-      "email": "",
-      "password": "",
-      "is_staff": false
-    });
-  }
 
   Future<List> getCanchas(String idComplejo) async {
-    final res = await _baseApi.get(url+idComplejo);
+    final res = await _baseApi.get(url+idComplejo, headerGet);
     final response = res['results'];
     if (res['count'] != 0) {
       return response;
@@ -51,6 +38,20 @@ class canchaController {
       },
     );
     return date;
+  }
+
+  Future<TimeOfDay> selectTime(BuildContext context, TimeOfDay selectedTime) async {
+    final TimeOfDay Time = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.fallback(),
+          child: child,
+        );
+      },
+    );
+    return Time;
   }
 
 

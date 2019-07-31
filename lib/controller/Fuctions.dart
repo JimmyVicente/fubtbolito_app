@@ -62,7 +62,7 @@ class Fuctions{
     }
   }
 
-  insertIpPreferences(String ip) async {
+  Future<String> insertIpPreferences(String ip) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('ip', ip);
   }

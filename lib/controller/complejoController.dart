@@ -8,6 +8,7 @@ class complejoController {
   BaseApi _baseApi = new BaseApi();
 
   static final url= Comunication.IP_CONEXION+'/complejos';
+  static final headerGet= Comunication.headersGet;
 
   static final Map<String, String> headers = {
     "content-type": "application/json",
@@ -27,7 +28,7 @@ class complejoController {
   Future<dynamic> getCompeljos() async {
     var coneccionInternet = await Fuctions().verificarConecionInternet();
     if(coneccionInternet){
-      final response = await _baseApi.get(url);
+      final response = await _baseApi.get(url, headerGet);
       if (response['count']!=0) {
         return response['results'];
       } else {

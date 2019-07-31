@@ -12,12 +12,7 @@ class signinController {
   BaseApi _baseApi = new BaseApi();
 
   static String Url= Comunication.IP_CONEXION+'/users/';
-
-  static final Map<String, String> headers = {
-    "content-type": "application/json",
-    "accept": "application/json",
-  };
-
+  static final headerGet= Comunication.headersGet;
 
   parameters(String usuario){
     return json.encode({
@@ -37,7 +32,7 @@ class signinController {
       }else{
         url= Url+'?username=';
       }
-      final response = await _baseApi.get(url+user);
+      final response = await _baseApi.get(url+user, headerGet);
       if(response['count']!=0){
         String passwordResponse =response['results'][0]['password'];
         String passwordImput= Fuctions().toSha256(password+ Fuctions().toMd5(password));
@@ -91,9 +86,9 @@ class signinController {
 
   //Metodo para salir o iniciar sesion persistence
   Future<void> verificarLogeado(BuildContext context) async{
-    var UserPercistence = await loadSesion();
-    if(UserPercistence!=null){
-     userController().getDataUser(); //metodo para ver datos de internet o preferens
+    var DataPercistence = await loadSesion();
+    if(DataPercistence!=null){
+     var  UserPercistence= await userController().getDataUser(DataPercistence); //metodo para ver datos de internet o preferens
       Navigator.of(context).pushReplacement(
           CupertinoPageRoute(
               builder: (BuildContext context)=> BottomNavigation(UserPercistence)

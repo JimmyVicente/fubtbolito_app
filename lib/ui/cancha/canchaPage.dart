@@ -3,85 +3,104 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:futbolito_app/controller/canchaController.dart';
+import 'package:futbolito_app/controller/reservaController.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 class CanchaPage extends StatefulWidget {
+  final user;
   final Complejo;
-  String image;
-  CanchaPage(this.Complejo, this.image);
+  CanchaPage(this.user,this.Complejo);
   @override
   _CanchaPageState createState() => _CanchaPageState();
 }
 
 class _CanchaPageState extends State<CanchaPage> {
   DateTime selectedDate = DateTime.now();
-  DateTime selectedHourStart = DateTime.now();
-  DateTime selectedHourEnd= DateTime.now();
+  TimeOfDay selectedHourStart = TimeOfDay(hour: DateTime.now().hour+1, minute: 00);
+  TimeOfDay selectedHourEnd = TimeOfDay(hour: DateTime.now().hour+2, minute: 00);
+  //cancha
+  int idCancha;
   //valor
-  int index=0;
-  double valorUnitario=00.00;
-  double valorTotal=00.00;
+  int index = 0;
+  double valorUnitario = 00.00;
+  double valorTotal = 00.00;
 
   bool _isLoadingServices = true;
   List dataCancha;
 
-  Future _getDataCanchas()async{
+  Future _getDataCanchas() async {
     var response = await canchaController().getCanchas('${widget.Complejo['id'].toString()}');
     setState(() {
       dataCancha = response;
-      _isLoadingServices=false;
+      _isLoadingServices = false;
     });
   }
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _getDataCanchas();
   }
+
   @override
   Widget build(BuildContext context) {
-    final _TextTitleComplejo =Container(
+    var heightS = MediaQuery.of(context).size.height;
+    var widthS = MediaQuery.of(context).size.width;
+    final _TextTitleComplejo = Container(
       child: Text(
         widget.Complejo['nombre_complejo'],
         style: TextStyle(
-            color: Colores.primaryColor,
-            fontSize: 20,
+          color: Colores.primaryColor,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
-          decorationColor: Colors.black
+          decorationColor: Colors.black,
         ),
       ),
     );
-    final _TextInfoPhone= Container(
+    final _TextInfoPhone = Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 5.0),
-            child: Icon(CupertinoIcons.phone, color: Colores.primaryColor, size: 15,),
+            child: Icon(
+              CupertinoIcons.phone,
+              color: Colores.primaryColor,
+              size: 15,
+            ),
           ),
           Container(
-            child: Text(widget.Complejo['telefono_complejo'], style: TextStyle(color: Colors.white, fontSize: 10),),
+            child: Text(
+              widget.Complejo['telefono_complejo'],
+              style: TextStyle(color: Colors.white, fontSize: 10),
+            ),
           ),
         ],
       ),
     );
-    final _TextInfoDirecion= Container(
-      child:  Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 5.0),
-            child: Icon(CupertinoIcons.location, color: Colores.primaryColor, size: 15,),
-          ),
-          Container(
-            child: Text(widget.Complejo['direccion_complejo'], style: TextStyle(color: Colors.white, fontSize: 10),),
-          ),
-        ],
-      )
-    );
-    final _Reservations=Container(
+    final _TextInfoDirecion = Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(right: 5.0),
+              child: Icon(
+                CupertinoIcons.location,
+                color: Colores.primaryColor,
+                size: 15,
+              ),
+            ),
+            Container(
+              child: Text(
+                widget.Complejo['direccion_complejo'],
+                style: TextStyle(color: Colors.white, fontSize: 10),
+              ),
+            ),
+          ],
+        ));
+    final _Reservations = Container(
         padding: EdgeInsets.only(top: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -97,11 +116,12 @@ class _CanchaPageState extends State<CanchaPage> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               color: Colors.grey,
-                              border: Border.all(color: Colors.white)
+                              border: Border.all(color: Colors.white)),
+                          child: Icon(
+                            CupertinoIcons.person,
+                            color: Colors.white,
                           ),
-                          child: Icon(CupertinoIcons.person, color: Colors.white,),
-                        )
-                    ),
+                        )),
                     Container(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(left: 12),
@@ -110,11 +130,12 @@ class _CanchaPageState extends State<CanchaPage> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               color: Colors.grey,
-                              border: Border.all(color: Colors.white)
+                              border: Border.all(color: Colors.white)),
+                          child: Icon(
+                            CupertinoIcons.person,
+                            color: Colors.white,
                           ),
-                          child: Icon(CupertinoIcons.person, color: Colors.white,),
-                        )
-                    ),
+                        )),
                     Container(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(left: 24),
@@ -123,55 +144,57 @@ class _CanchaPageState extends State<CanchaPage> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               color: Colors.grey,
-                              border: Border.all(color: Colors.white)
+                              border: Border.all(color: Colors.white)),
+                          child: Icon(
+                            CupertinoIcons.person,
+                            color: Colors.white,
                           ),
-                          child: Icon(CupertinoIcons.person, color: Colors.white,),
-                        )
-                    ),
-
+                        )),
                   ],
-                )
-            ),
+                )),
             Container(
               child: Text(
                 '+ 10 reservas',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colores.primaryColor
-                ),
+                    fontWeight: FontWeight.bold, color: Colores.primaryColor),
               ),
             )
           ],
         )
     );
-    final _image= Container(
-      height: 180,
-      width: MediaQuery.of(context).size.width,
-      decoration: widget.image!=null?
-      BoxDecoration(
+    final _image = Container(
+      height: heightS/2*0.45,
+      width: widthS,
+      decoration: widget.Complejo['foto_complejo'] != null
+          ? BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage(widget.image),
+              image: NetworkImage(widget.Complejo['foto_complejo'].toString()),
               fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken)
-          )
-      ):
-      BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/trees.jpg'),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken)
-          )
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.5), BlendMode.darken)))
+          : BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/trees.jpg'),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.5),
+            BlendMode.darken,
+          ),
+        ),
       ),
-      child:  Stack(
-        children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.white,),
+      child: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
               onPressed: (){
                 Navigator.pop(context);
-              }
-          ),
-          Center(
-            child: Column(
+              },
+            ),
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 _TextTitleComplejo,
@@ -180,88 +203,79 @@ class _CanchaPageState extends State<CanchaPage> {
                 _Reservations
               ],
             ),
-          )
-        ],
-      ),
+          ],
+        ),
+      )
     );
-    final _nullCanchas=Center(
+    final _nullCanchas = Center(
       child: Text(
         'No Hay canchas para este complejo :(',
         textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: 20
-        ),
+        style: TextStyle(color: Colors.black, fontSize: 20),
       ),
     );
-    final _TextTitleSelectCancha=Container(
+    final _TextTitleSelectCancha = Container(
       padding: EdgeInsets.only(top: 2),
       alignment: Alignment.center,
       child: Text(
         'Seleccione una cancha:',
         style: TextStyle(
-            color: Colores.primaryColor,
+          color: Colores.primaryColor,
         ),
       ),
     );
     final _ListCanchas = Container(
-        padding: EdgeInsets.only(left: 20, right: 20,),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: dataCancha==null?0:dataCancha.length,
-            itemBuilder: (BuildContext context, int i){
-              return Cancha(dataCancha[i], i);
-            },
-          ),
+      height: heightS/2*0.4,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: dataCancha == null ? 0 : dataCancha.length,
+        itemBuilder: (BuildContext context, int i) {
+          return Cancha(dataCancha[i], i);
+        },
+      ),
     );
-    final _TextTitleDate=Container(
+    final _TextTitleDate = Container(
       padding: EdgeInsets.only(top: 2),
       alignment: Alignment.center,
       child: Text(
         'Selecione la fecha:',
         style: TextStyle(
-            color: Colores.primaryColor,
+          color: Colores.primaryColor,
         ),
       ),
     );
-    final _ImputDateText=Container(
-        padding: EdgeInsets.only(top: 2),
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-                child: IconButton(
-                  icon: Icon(FontAwesomeIcons.calendarAlt),
-                  onPressed: ()async{
-//                    DatePicker.showDatePicker(context,
-//                        showTitleActions: true,
-//                        currentTime: selectedDate,
-//                        minTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-//                        maxTime: DateTime(DateTime.now().year+1, DateTime.now().month, DateTime.now().day),
-//                        onConfirm: (date) {
-//                          setState(() {
-//                            selectedDate=date;
-//                          });
-//                        },
-//                        locale: LocaleType.es
-//                    );
-                    var picked= await canchaController().selectDate(context, selectedDate);
-                    if (picked != null && picked != selectedDate)
-                      setState(() {
-                        selectedDate = picked;
-                      });
-                  },
-                )
+    final _ImputDateText = Container(
+        margin: EdgeInsets.only(right: 50, left: 50),
+        child: InkWell(
+          child: Chip(
+            avatar: CircleAvatar(
+              backgroundColor: Colors.grey.shade800,
+              child: Text('AB'),
             ),
-            Container(
-                padding: EdgeInsets.only(right: 20),
-                child:  Text(DateFormat('dd-MM-yyyy').format(selectedDate)),
-            ),
-          ],
+            label: Text('Aaron Burr'),
+          ),
+          onTap: ()=> selectDate(),
         )
+
+//        Row(
+//          mainAxisAlignment: MainAxisAlignment.center,
+//          children: <Widget>[
+//            Container(
+//                child: IconButton(
+//                  icon: Icon(FontAwesomeIcons.calendarAlt),
+//                  onPressed: () {
+//                    selectDate();
+//                  },
+//                )
+//            ),
+//            Container(
+//              padding: EdgeInsets.only(right: 20),
+//              child: Text(DateFormat('dd-MM-yyyy').format(selectedDate)),
+//            ),
+//          ],
+//        )
     );
-    final _TextTitleTime=Container(
+    final _TextTitleTime = Container(
       padding: EdgeInsets.only(top: 2),
       alignment: Alignment.center,
       child: Text(
@@ -271,7 +285,7 @@ class _CanchaPageState extends State<CanchaPage> {
         ),
       ),
     );
-    final _TextTitleHour=Container(
+    final _TextTitleHour = Container(
         padding: EdgeInsets.only(top: 3),
         alignment: Alignment.centerLeft,
         child: Row(
@@ -280,24 +294,20 @@ class _CanchaPageState extends State<CanchaPage> {
             Container(
                 padding: EdgeInsets.only(right: 30),
                 child: Text(
-                    'Hoara de inicio',
-                  style: TextStyle(
-                    fontSize: 10
-                  ),
+                  'Hoara de inicio',
+                  style: TextStyle(fontSize: 10),
                 )
             ),
             Container(
                 child: Text(
-                    'Hora de salida',
-                  style: TextStyle(
-                      fontSize: 10
-                  ),
+                  'Hora de salida',
+                  style: TextStyle(fontSize: 10),
                 )
             )
           ],
         )
     );
-    final _ImputTime=Container(
+    final _ImputTime = Container(
         alignment: Alignment.centerLeft,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -305,30 +315,30 @@ class _CanchaPageState extends State<CanchaPage> {
             Container(
                 child: IconButton(
                   icon: Icon(CupertinoIcons.time),
-                  onPressed: ()async{
+                  onPressed: () async {
                     selectHourStart();
                   },
                 )
             ),
             Container(
                 padding: EdgeInsets.only(right: 20),
-                child: Text(DateFormat("h:mm a").format(selectedHourStart))
+                child: Text('${selectedHourStart.hour}:${selectedHourStart.minute}h')
             ),
             Container(
                 child: IconButton(
                   icon: Icon(CupertinoIcons.time),
-                  onPressed: (){
+                  onPressed: () {
                     selectHourEnd();
                   },
                 )
             ),
             Container(
-                child: Text(DateFormat("h:mm a").format(selectedHourEnd))
+                child: Text('${selectedHourEnd.hour}:${selectedHourEnd.minute}')
             )
           ],
         )
     );
-    final _TextTitleValor=Container(
+    final _TextTitleValor = Container(
       alignment: Alignment.center,
       child: Text(
         'Valor a pagar',
@@ -337,84 +347,76 @@ class _CanchaPageState extends State<CanchaPage> {
         ),
       ),
     );
-    final _ImputValor=Container(
+    final _ImputValor = Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-                child: Icon(Icons.attach_money),
+              child: Icon(Icons.attach_money),
             ),
             Container(
                 padding: EdgeInsets.only(right: 15),
                 child: Text('${valorUnitario}')
             ),
             Container(
-                child: Icon(Icons.attach_money),
+              child: Icon(Icons.attach_money),
             ),
-            Container(
-                child: Text('${valorTotal}')
+            Container(child: Text('${valorTotal}')
             )
           ],
         )
     );
-    final _TextTitleLocationComplejo=Container(
+    final _TextTitleLocationComplejo = Container(
       padding: EdgeInsets.only(top: 2, bottom: 4),
       child: Text(
         'Ubicación:',
         style: TextStyle(
-            color: Colores.primaryColor,
+          color: Colores.primaryColor,
         ),
       ),
     );
     final _ButtomReservationCancha = Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(12.0),
         color: Colores.primaryColor,
-        child: InkWell(
+        child: FlatButton(
           child: Text(
             'RESERVAR CANCHA',
-            style: new TextStyle(
-                color: Colors.white,
-                fontSize: 15
-            ),
+            style: new TextStyle(color: Colors.white, fontSize: 15),
             textAlign: TextAlign.center,
           ),
-          onTap: (){
-
+          onPressed: () {
+            reserva();
           },
         )
     );
-    final _body =Container(
-        padding: EdgeInsets.only(right: 10, left: 10, top: 150 , bottom: 10),
+    final _body = Container(
+        margin: EdgeInsets.only(right: 10, left: 10, top: heightS/2*0.38, bottom: 10),
         child: Card(
-            child: this._isLoadingServices ? Center(child: CircularProgressIndicator()):
-            dataCancha == null ? _nullCanchas:
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _TextTitleSelectCancha,
-                  Expanded(child: _ListCanchas),
-                  _TextTitleDate,
-                  _ImputDateText,
-                  _TextTitleTime,
-                  _TextTitleHour,
-                  _ImputTime,
-                  _TextTitleValor,
-                  _ImputValor,
-                  _TextTitleLocationComplejo,
-                  Expanded(child: Widgets.GoogleMaps(widget.Complejo['nombre_complejo'], -4.009644, -79.203737)),
-                ],
-              ),
-            )
+          child: this._isLoadingServices ? Center(child: CircularProgressIndicator()):
+          dataCancha == null ? _nullCanchas :
+          ListView(
+            padding: EdgeInsets.all(10),
+            children: <Widget>[
+              _TextTitleSelectCancha,
+              _ListCanchas,
+              _TextTitleDate,
+              _ImputDateText,
+              _TextTitleTime,
+              _TextTitleHour,
+              _ImputTime,
+              _TextTitleValor,
+              _ImputValor,
+              _TextTitleLocationComplejo,
+            ],
+          ),
         )
     );
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
+      resizeToAvoidBottomInset: false,
+        body: Stack(
             children: [
               Widgets.wallpaper,
+              _image,
               Column(
                 children: <Widget>[
                   Expanded(
@@ -430,113 +432,153 @@ class _CanchaPageState extends State<CanchaPage> {
               ),
             ]
         ),
-      )
     );
   }
 
-  Widget Cancha(Map data, int i){
-    final _TitleCancha=Container(
-      child: Text(data['descripcion_cancha'],
+  Widget Cancha(Map data, int i) {
+    final _TitleCancha = Container(
+      child: Text(
+        data['descripcion_cancha'].toString(),
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: Colors.blue,
-            fontSize: 20,
-            fontWeight: FontWeight.bold
-        ),
+            color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold),
       ),
     );
-    final _SelectCancha=Container(
-      child: CircleAvatar(
-        backgroundColor: Colors.grey.withOpacity(0.5),
-        child: Icon(
-          FontAwesomeIcons.check,
-          color: Colors.green,
-        ),
-      )
-    );
+    final _SelectCancha = Container(
+        child: CircleAvatar(
+          backgroundColor: Colors.grey.withOpacity(0.5),
+          child: Icon(
+            FontAwesomeIcons.check,
+            color: Colors.green,
+          ),
+        ));
 
-    final _Image= Container(
-        width: 250,
+    final _Image = Container(
+        width: 220,
         height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/canchaFutbol.png'),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.colorBurn)
-            )
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _TitleCancha,
-          ],
-        )
-    );
-    final _ImageSelect= Container(
-        width: 250,
-        height: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            image: DecorationImage(
+          borderRadius: BorderRadius.circular(10),
+            image: data['foto_cancha']!=null?DecorationImage(
+                image: NetworkImage(data['foto_cancha'].toString()),
+                fit: BoxFit.cover,
+                colorFilter: data['estado_cancha']?
+                ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.colorBurn):
+                ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.colorBurn)
+            ):DecorationImage(
                 image: AssetImage('assets/images/canchaFutbol.png'),
                 fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.colorBurn)
+                colorFilter: data['estado_cancha']?
+                ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.colorBurn):
+                ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.colorBurn)
             )
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _TitleCancha,
-            _SelectCancha
+            data['estado_cancha']?
+            _TitleCancha:
+            Column(
+              children: <Widget>[
+                _TitleCancha,
+                _SelectCancha
+              ],
+            )
           ],
-        )
-    );
+        ));
     return Container(
       margin: EdgeInsets.only(right: 12),
       child: InkWell(
-        child: data['estado_cancha']?_Image:_ImageSelect,
-          onTap: (){
-          setState(() {
-            if(data['estado_cancha']){
-              dataCancha[index]['estado_cancha']=true;
-              data['estado_cancha']=false;
-              valorUnitario=double.parse(data['valor_dia']);
-              valorTotal=double.parse(data['valor_dia']);
-              index=i;
-            }else{
-              data['estado_cancha']=true;
-              valorUnitario=0.0;
-              valorTotal=0.0;
-            }
-          });
-          print(data['valor_dia']);
+        child: _Image,
+        onTap: () {
+          selectCancha(data, i);
         },
       ),
     );
   }
-
-  selectHourStart(){
-    DatePicker.showTimePicker(context,
-        showTitleActions: true,
-        onConfirm: (date) {
-          setState(() {
-            selectedHourStart=date;
-          });
-        },
-        currentTime: selectedHourStart,
-        locale: LocaleType.es
-    );
+  selectCancha(Map data, int i){
+    setState(() {
+      if (data['estado_cancha']) {
+        dataCancha[index]['estado_cancha'] = true;
+        data['estado_cancha'] = false;
+        valorUnitario = double.parse(data['valor_dia']);
+        valorTotal = double.parse(data['valor_dia']);
+        index = i;
+        idCancha=data['id'];
+      } else {
+        data['estado_cancha'] = true;
+        valorUnitario = 0.0;
+        valorTotal = 0.0;
+        idCancha=null;
+      }
+    });
   }
 
-  selectHourEnd(){
-    DatePicker.showTimePicker(context,
-        showTitleActions: true,
-        onConfirm: (date) {
-          setState(() {
-            selectedHourEnd=date;
-          });
-        },
-        currentTime: selectedHourStart,
-        locale: LocaleType.es
+  selectDate() async{
+    var picked = await canchaController().selectDate(context, selectedDate);
+    if (picked != null && picked != selectedDate){
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
+  selectHourStart() async{
+    var picked = await canchaController()
+        .selectTime(
+        context,
+        TimeOfDay(
+            hour: selectedHourStart.hour,
+            minute: selectedHourStart.minute
+        )
     );
+    if (picked != null && picked != selectedDate){
+      setState(() {
+        selectedHourStart = picked;
+        selectedHourEnd=TimeOfDay(
+            hour: picked.hour+1,
+            minute: picked.minute
+        );
+      });
+    }
+  }
+
+  selectHourEnd() async{
+    var picked = await canchaController()
+        .selectTime(
+        context,
+        TimeOfDay(
+            hour: selectedHourEnd.hour,
+            minute: selectedHourEnd.minute
+        )
+    );
+    if (picked != null && picked != selectedDate){
+      setState(() {
+        selectedHourEnd = picked;
+      });
+    }
+  }
+
+  reserva() async{
+    if(idCancha!=null){
+      int idUser=widget.user['id'];
+      String Date= DateFormat('yyyy-MM-dd').format(selectedDate);
+      String startTime='${selectedHourStart.hour}:${selectedHourStart.minute}:00';
+      String endTime='${selectedHourEnd.hour}:${selectedHourEnd.minute}:00';
+//      final response = await reservaController()
+//          .postReserva(
+//          idUser,
+//          idCancha,
+//          Date,
+//          startTime,
+//          endTime,
+//          valorUnitario,
+//          valorUnitario
+//      );
+      final response = await reservaController().validarReserva(dataCancha, idCancha, Date, startTime, endTime);
+      print(response);
+    }else{
+      print('Selecione una cancha');
+    }
+
   }
 }

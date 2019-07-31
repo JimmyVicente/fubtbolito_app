@@ -138,7 +138,7 @@ class _ReservationMadePageState extends State<ReservationMadePage> {
     );
   }
   Future<Map> loadData() async {
-    var response = await reservaController().getReservas();
+    var response = await reservaController().getReservaUser();
     return response[0];
   }
 }

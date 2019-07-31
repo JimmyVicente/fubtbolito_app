@@ -10,15 +10,12 @@ import 'base_api.dart';
 
 class registerController{
 
-  static final String Url = Comunication.IP_CONEXION+ '/users/';
+   String Url = Comunication.IP_CONEXION+ '/users/';
+   final headersPost = Comunication.headersPost;
+   static final headerGet= Comunication.headersGet;
 
   BaseApi _baseApi = new BaseApi();
 
-  static final Map<String, String> headers = {
-    "content-type": "application/json",
-    "accept": "application/json",
-    HttpHeaders.authorizationHeader: "Basic amx2aWNlbnRlOjE1MjM="
-  };
 
   parameters(String firstName, String lastName,String username, String email, String contrasenia){
     return json.encode({
@@ -44,7 +41,7 @@ class registerController{
     if(coneccionInternet){
       final responseGetEmailUsers = await getEmailUsers(email);
       if(responseGetEmailUsers==false){
-        http.Response response = await http.post(Url, body: parameters, headers: headers);
+        http.Response response = await http.post(Url, body: parameters, headers: headersPost);
         var dataResponse=json.decode(response.body);
         if(dataResponse['url']!=null){
           return 'registrado';
@@ -61,7 +58,7 @@ class registerController{
 
   Future<bool> getEmailUsers(String email) async {
     bool emailbase= false;
-    var response = await _baseApi.get(Url);
+    var response = await _baseApi.get(Url, headerGet);
     List data= response['results'];
     for(int i=0; i<data.length;i++){
       if(email==data[i]['email'].toString()){

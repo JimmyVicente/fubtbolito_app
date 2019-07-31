@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert' show utf8;
 
 class BaseApi {
   static BaseApi _instance = new BaseApi.internal();
@@ -11,7 +12,7 @@ class BaseApi {
 
   final JsonDecoder _decoder = new JsonDecoder();
 
-  Future<dynamic> get(String url) {
+  Future<dynamic> get(String url, Map headers) {
     return http.get(url).then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
@@ -22,9 +23,9 @@ class BaseApi {
     });
   }
 
-  Future<dynamic> post(String url, {Map headers, body, encoding}) {
+  Future<dynamic> post(String url, Map headers, body) {
     return http
-        .post(url, body: body, headers: headers, encoding: encoding)
+        .post(url, body: body, headers: headers)
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
@@ -36,9 +37,9 @@ class BaseApi {
     });
   }
 
-  Future<dynamic> put(String url, {Map headers, body, encoding}) {
+  Future<dynamic> put(String url, Map headers, body) {
     return http
-        .put(url, body: body, headers: headers, encoding: encoding)
+        .put(url, body: body, headers: headers)
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;

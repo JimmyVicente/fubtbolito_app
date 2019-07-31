@@ -7,7 +7,7 @@ class ForgotPasswordPageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Color textFieldActiveColor = Colors.white;
     Color textFieldInactiveColor = Colors.grey;
-
+    
     var emailField = Container(
       margin: EdgeInsets.symmetric(vertical: 27.5),
       child: TextField(

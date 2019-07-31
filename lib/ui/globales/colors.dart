@@ -11,7 +11,7 @@ class Colores {
   static final appBar= Color.fromRGBO(0, 34, 73,0);
   static final colorBlanco= Color.fromRGBO(0, 34, 73,0);
   static final colorNegro= Color.fromRGBO(0, 34, 73,0);
-  static final colorAzul= Color.fromRGBO(0, 34, 73,1);
+  static final colorAzul= Color.fromRGBO(1, 34, 73,1);
   static final colorGris= Color.fromRGBO(0, 34, 73,0);
 
   //Gradientes
