@@ -7,8 +7,6 @@ import 'package:futbolito_app/ui/globales/widget.dart';
 import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 
 class EventPage extends StatefulWidget {
-  final userPercistence;
-  EventPage(this.userPercistence);
 
   @override
   _eventPageState createState() => _eventPageState();
@@ -25,7 +23,7 @@ class _eventPageState extends State<EventPage> {
     );
     return Scaffold(
       appBar: _appBar,
-      drawer: DrawerPage.drawer(context, widget.userPercistence),
+      drawer: DrawerPage.drawer(context),
       body: Stack(
         children: [
           Widgets.wallpaper,

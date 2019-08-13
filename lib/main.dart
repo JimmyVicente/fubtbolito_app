@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:futbolito_app/ui/globales/bottomNavigation.dart';
 import 'package:futbolito_app/ui/signin/signin.dart';
 import 'package:futbolito_app/ui/splashScreen.dart';
 
 void main() => runApp(MyApp());
-
 
 class MyApp extends StatelessWidget {
   @override

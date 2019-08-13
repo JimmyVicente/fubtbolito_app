@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:futbolito_app/controller/comunication.dart';
 import 'package:futbolito_app/controller/Fuctions.dart';
 import 'dart:async';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 
@@ -28,7 +27,7 @@ class registerController{
     });
   }
 
-  
+
   Future<String> postSignup(String firstName, String lastName,String username, String email, String contrasenia) async {
     var parameters= json.encode({
       "first_name": firstName,
@@ -42,12 +41,13 @@ class registerController{
     if(coneccionInternet){
       final responseGetEmailUsers = await getEmailUsers(email);
       if(responseGetEmailUsers==false){
-        http.Response response = await http.post(Url, body: parameters, headers: headersPost);
-        var dataResponse=json.decode(response.body);
-        if(dataResponse['url']!=null){
+        final response= await _baseApi.post(Url, headersPost, parameters);
+        if(response['url']!=null){
           return 'registrado';
-        }else{
-          return 'Ya existe un usuario con este nombre';
+        }else if(response['email']!=null){
+          return response['email'].toString();
+        }else if(response['username']!=null){
+          return response['username'].toString();
         }
       }else{
         return 'Alguien mas tiene este correo';

@@ -25,7 +25,7 @@ class _ReservationMadePageState extends State<ReservationMadePage> {
         centerTitle: true,
         title: Text('HISTORIAL',)
     );
-    final Fute = FutureBuilder(
+    final fute = FutureBuilder(
       future: loadData(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -51,7 +51,7 @@ class _ReservationMadePageState extends State<ReservationMadePage> {
                 padding: EdgeInsets.all(20),
                 children: [
                   titleTable('Reservas', Colores.primaryColor),
-                  Fute,
+                  fute,
                 ],
               ),
             ),

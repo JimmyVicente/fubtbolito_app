@@ -1,87 +1,106 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-
-import '../homePage.dart';
 
 
-class mapaAlert {
+class MapaComplejo extends StatefulWidget {
+  final VoidCallback onClose;
+  final data;
+  const MapaComplejo(this.data, {this.onClose});
+  @override
+  State<StatefulWidget> createState() => MapaComplejoState();
+}
 
-  void verMapa(Map data, BuildContext context) {
-    double latitude;
-    double longitude;
-    String coordenadas= data['coordenadas_complejo'];
+class MapaComplejoState extends State<MapaComplejo> with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation<double> opacityAnimation;
+  Animation<double> scaleAnimatoin;
+
+  //
+  double latitude;
+  double longitude;
+
+  cargarCordenadas(){
+    String coordenadas= widget.data['coordenadas_complejo'];
     if(coordenadas!=null){
       var arrayCoordenadas=coordenadas.split(',');
       latitude= double.parse(arrayCoordenadas[0]);
       longitude= double.parse(arrayCoordenadas[1]);
     }
+  }
 
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    opacityAnimation = Tween<double>(begin: 0.0, end: 0.4).animate(
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn));
+    scaleAnimatoin =
+        CurvedAnimation(parent: controller, curve: Curves.elasticInOut);
+    controller.addListener(() {
+      setState(() {});
+    });
+    controller.forward();
+    cargarCordenadas();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appBar=  Container(
+      height: 60,
+      color: Colores.primaryColor,
+      child: ListTile(
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: widget.onClose
+        ),
+        title: Text(
+          'MAPA',
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
+      ),
+    );
     var nullCoor= Center(
       child: Text(
-          'No hay Coordenadas para este complejo',
+        'No hay Coordenadas para este complejo',
         textAlign: TextAlign.center,
       ),
     );
-    var alertStyle = AlertStyle(
-      animationType: AnimationType.shrink,
-      isCloseButton: false,
-      descStyle: TextStyle(fontWeight: FontWeight.bold),
-      animationDuration: Duration(milliseconds: 200),
-      alertBorder: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-        side: BorderSide(
-          color: Colors.grey,
-        ),
-      ),
-      titleStyle: TextStyle(
-        color: Colores.primaryColor,
-      ),
-    );
-    Alert(
-        context: context,
-        style: alertStyle,
-        title: "Mapa",
-        content: Stack(
-          children: <Widget>[
-            latitude==null?nullCoor:
-            Container(
-              height: MediaQuery.of(context).size.height/2*0.6,
-              child: Widgets.GoogleMaps(
-                  '${data['nombre_complejo']}',
-                  latitude,
-                  longitude
-              ),
-            )
-          ],
-        ),
-        buttons: [
-          DialogButton(
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-            child: Text(
-              "CERRAR",
-              style: TextStyle(color: Colors.white, fontSize: 20),
+    return Scaffold(
+      backgroundColor:Colors.black.withOpacity(opacityAnimation.value),
+      body: ScaleTransition(
+        scale: scaleAnimatoin,
+        child: Container(
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/4),
+          decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0))),
+          child:Container(
+            child: Column(
+              children: <Widget>[
+                appBar,
+                Expanded(
+                  child: latitude==null?nullCoor:
+                  Widgets.GoogleMaps(
+                      '${widget.data['nombre_complejo']}',
+                      latitude,
+                      longitude
+                  ),
+                )
+              ],
             ),
           )
-        ]).show();
-//    Navigator.push(context, PageRouteBuilder(
-//        opaque: false,
-//        pageBuilder: (BuildContext context, _, __) {
-//          return mapaPage(data);
-//        },
-//        transitionsBuilder: (___, Animation<double> animation, ____, Widget child) {
-//          return FadeTransition(
-//            opacity: animation,
-//            child: RotationTransition(
-//              turns: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
-//              child: child,
-//            ),
-//          );
-//        }
-//    ));
+        ),
+      ),
+    );
   }
 }

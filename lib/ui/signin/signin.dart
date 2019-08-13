@@ -133,7 +133,7 @@ class _SignInPageWidgetState extends State<SignInPageWidget> with signinControll
           if (_formKey.currentState.validate()) {
             Widgets().showDialogLoading(context);
             final response = await verificarInicio(controllerUser.text, controllerPassword.text);
-            if(response['url'] != null){
+            if(response == 'iniciado'){
               verificarLogeado(context);
             }else{
               setState(() {

@@ -4,6 +4,7 @@ import 'package:futbolito_app/controller/base_api.dart';
 import 'package:futbolito_app/controller/comunication.dart';
 import 'package:futbolito_app/controller/Fuctions.dart';
 import 'package:futbolito_app/controller/userController.dart';
+import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/globales/bottomNavigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +24,7 @@ class signinController {
     });
   }
 
-  Future<dynamic> verificarInicio(String user, String password) async{
+  Future<String> verificarInicio(String user, String password) async{
     final coneccionInternet = await Fuctions().verificarConecionInternet();
     if(coneccionInternet){
       String url='';
@@ -32,6 +33,7 @@ class signinController {
       }else{
         url= Url+'?username=';
       }
+      print(url+user);
       final response = await _baseApi.get(url+user, headerGet);
       if(response['count']!=0){
         String passwordResponse =response['results'][0]['password'];
@@ -39,7 +41,7 @@ class signinController {
         if(passwordResponse==passwordImput){
           insertLoginPreferences(response['results'][0]);
           if(loadSesion!=null){
-            return response['results'][0];
+            return 'iniciado';
           }else{
             return 'Algo salio mal';
           }
@@ -88,10 +90,11 @@ class signinController {
   Future<void> verificarLogeado(BuildContext context) async{
     var DataPercistence = await loadSesion();
     if(DataPercistence!=null){
-     var  UserPercistence= await userController().getDataUser(DataPercistence); //metodo para ver datos de internet o preferens
+     var  UserPercistence= await userController().getDataUser(context,DataPercistence);
+      User().insertUser(UserPercistence);
       Navigator.of(context).pushReplacement(
           CupertinoPageRoute(
-              builder: (BuildContext context)=> BottomNavigation(UserPercistence)
+              builder: (BuildContext context)=> BottomNavigation()
           ));
     }else{
       Navigator.of(context).pushReplacementNamed('/signin');

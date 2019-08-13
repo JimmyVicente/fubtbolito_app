@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/material/time.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:futbolito_app/controller/base_api.dart';
 import 'package:futbolito_app/controller/comunication.dart';
 import 'package:futbolito_app/controller/Fuctions.dart';
+import 'package:futbolito_app/ui/globales/Alerts.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class reservaController {
 
@@ -44,48 +48,70 @@ class reservaController {
     }
   }
 
-  Future<String> validarReserva(List dataCancha, int idCancha, String date, String startTime, String endTime) async {
+  Future<dynamic> getReservaIdCancha(int idCancha) async {
     List reservas = await getReserva();
+    List resCancha=[];
+    if(reservas!=null){
+      for(int i=0; i<reservas.length; i++){
+        if(reservas[i]['estado_reserva']==true){
+          if(reservas[i]['cancha']==idCancha){
+            resCancha.add(reservas[i]);
+          }
+        }
+      }
+      return resCancha;
+    }else{
+      return null;
+    }
+  }
 
-    List reservasComplejo=[];
+  Future<bool> validarReserva(int idCancha, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
+    List reservas = await getReserva();
+    List resCancha=[];
+
+    //horas
+    String DateStr= Fuctions().formatDateString(date);
+    String startTimeStr= Fuctions().formatTimeString(startTime);
+    String endTimeStr=Fuctions().formatTimeString(endTime);
+
+    if(reservas==null){
+      return true;
+    }
 
     for(int i=0; i<reservas.length; i++){
       if(reservas[i]['estado_reserva']==true){
-        for(int j=0; j<dataCancha.length; j++){
-          print(reservas[1]['cancha'].toString() +'=='+ dataCancha[j]['id'].toString());
-          if(reservas[i]['cancha']==dataCancha[j]['id']){
-            reservasComplejo.add(reservas[i]);
-            print(dataCancha[j]['id']);
-          }
+        if(reservas[i]['cancha']==idCancha){
+          resCancha.add(reservas[i]);
         }
       }
     }
 
-    print(reservasComplejo);
-
-    for(int i=0; i<reservasComplejo.length; i++){
-      if(reservasComplejo[i]['cancha']==idCancha && reservasComplejo[i]['fecha_reserva'].toString()==date && reservasComplejo[i]['hora_inicio']== startTime&& reservasComplejo[i]['hora_fin']==endTime){
-        return 'La cancha está ocupada';
-      }else{
-        return 'guardado';
+    if(resCancha.length!=0){
+      for(int i=0; i<resCancha.length; i++){
+        TimeOfDay hora_inicio= Fuctions().formatTimeOfDay(resCancha[i]['hora_inicio']);
+        if(resCancha[i]['fecha_reserva']==DateStr && resCancha[i]['hora_inicio']== startTimeStr&& resCancha[i]['hora_fin']==endTimeStr){
+          AlertWidget().showToastError("Horario no disponible para esta cancha");
+        }else if(resCancha[i]['fecha_reserva']==DateStr &&hora_inicio.hour==startTime.hour){
+          AlertWidget().showToastError("Horario no disponible para esta cancha");
+        }else{
+          return true;
+        }
       }
+
     }
-
-
-//    else if(reservasComplejo[i]['cancha'] == idCancha && reservasComplejo[i]['fecha_reserva']==date && ((startTime.hour > reservasComplejo[i]['hora_inicio'] && startTime.hour < reservasComplejo[i]['hora_fin']) || (endTime.hour >reservasComplejo[i]['hora_fin'] && endTime.hour < reservasComplejo[i]['hora_fin']) || (startTime == reservasComplejo[i]['hora_inicio']|| endTime == reservasComplejo[i]['hora_fin']) || (startTime.hour < reservasComplejo[i]['hora_inicio'] && endTime.hour > reservasComplejo[i]['hora_fin']))){
-//    return 'La cancha está ocupada';
-//    }
 
   }
 
 
-  Future<String> postReserva(int idUser,int idCancha, String Date,String startTime, String endTime, double valorU, double valorT) async {
+
+
+  Future<String> postReserva(int idUser,int idCancha, DateTime date,TimeOfDay startTime, TimeOfDay endTime, double valorU, double valorT) async {
     var parameters= json.encode({
       "usuario": idUser,
       "cancha": idCancha,
-      "fecha_reserva": Date,
-      "hora_inicio": startTime,
-      "hora_fin": endTime,
+      "fecha_reserva": Fuctions().formatDateString(date),
+      "hora_inicio":  Fuctions().formatTimeString(startTime),
+      "hora_fin":  Fuctions().formatTimeString(endTime),
       "valor_unitario": valorU,
       "valor_total": valorT,
       "estado_reserva": true

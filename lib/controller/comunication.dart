@@ -1,8 +1,7 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 
 class Comunication{
-  static String IP= '10.20.5.237';
+  static String IP= '192.168.0.15';
   static String IP_CONEXION= "http://"+IP+ "/api";
 
   static final Map<String, String> headersPost = {
@@ -12,8 +11,8 @@ class Comunication{
   };
 
   static final Map<String, String> headersGet = {
-  "Content-Type": "application/json",
-  "Vary": "Accept",
+    "Content-Type": "application/json",
+    "Vary": "Accept",
   };
 
 }

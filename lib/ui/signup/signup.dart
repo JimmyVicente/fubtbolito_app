@@ -20,7 +20,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
   TextEditingController controllerEmail = new TextEditingController();
   TextEditingController controllerUser = new TextEditingController();
   TextEditingController controllerPassword = new TextEditingController();
-  RegExp emailRegExp = new RegExp(r'^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$');
   bool passwordObscureText=true;
   String mensaje="";
 
@@ -97,8 +96,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
             return "Escriba su correo";
           } else if (text.length <= 3) {
             return "Escriba al menos 4 caracteres";
-          }else if(!emailRegExp.hasMatch(text)){
-            return "Escriba un correo valido";
           }
           return null;
         },
@@ -226,8 +223,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
             );
             if(response=='registrado'){
               final responseSignin = await signinController().verificarInicio(controllerUser.text, controllerPassword.text);
-              if(responseSignin['url'] != null){
-                Navigator.pop(context);
+              if(responseSignin == 'iniciado'){
                 signinController().verificarLogeado(context);
               }
             }else {

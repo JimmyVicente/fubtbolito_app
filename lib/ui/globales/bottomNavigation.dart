@@ -9,8 +9,6 @@ import 'package:futbolito_app/ui/signin/signin.dart';
 
 
 class BottomNavigation extends StatelessWidget {
-  final userPercistence;
-  BottomNavigation(this.userPercistence);
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +19,16 @@ class BottomNavigation extends StatelessWidget {
           primarySwatch: Colors.green,
         ),
       routes: {
-        '/':(context)=> Tabs(userPercistence),
+        '/':(context)=> Tabs(),
         '/siging':(context)=> SignInPageWidget(),
-        '/home':(context)=> HomePage(userPercistence),
-        '/reservation':(context)=> ReservationPage(userPercistence),
-        '/event':(context)=> EventPage(userPercistence),
+        '/home':(context)=> HomePage(),
+        '/reservation':(context)=> ReservationPage(),
+        '/event':(context)=> EventPage(),
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: [
         const Locale('en'), // English
@@ -40,8 +39,6 @@ class BottomNavigation extends StatelessWidget {
 }
 
 class Tabs extends StatelessWidget {
-  final userPercistence;
-  Tabs(this.userPercistence);
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: DefaultTabController(
@@ -49,9 +46,9 @@ class Tabs extends StatelessWidget {
         child: new Scaffold(
           body: TabBarView(
             children: <Widget>[
-              HomePage(userPercistence),
-              ReservationPage(userPercistence),
-              EventPage(userPercistence),
+              HomePage(),
+              ReservationPage(),
+              EventPage(),
             ],
           ),
           bottomNavigationBar: PreferredSize(

@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:futbolito_app/model/user.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
-import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
-
 import 'PerfilWidget.dart';
 
 class perfilPage extends StatefulWidget {
-  final userPercistence;
-  perfilPage(this.userPercistence);
-
   @override
   _perfilPage createState() => _perfilPage();
 }
 
 class _perfilPage extends State<perfilPage> {
-
   @override
   Widget build(BuildContext context) {
     final _image= Container(
@@ -43,25 +38,25 @@ class _perfilPage extends State<perfilPage> {
       alignment: Alignment.topCenter,
       margin: EdgeInsets.only( top: 120),
       child: Container(
-          height: 100,
-          width: 100,
-          decoration: BoxDecoration(
+        height: 100,
+        width: 100,
+        decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             border: Border.all(color: Colors.green[500], width: 2),
             color: Colors.blue
-          ),
-          padding: EdgeInsets.all(2),
-          child: CircleAvatar(
-            backgroundColor: Colors.blue,
-            backgroundImage: AssetImage('assets/images/user.png'),
-          ),
+        ),
+        padding: EdgeInsets.all(2),
+        child: CircleAvatar(
+          backgroundColor: Colors.blue,
+          backgroundImage: AssetImage('assets/images/user.png'),
+        ),
       ),
     );
 
     var nameUser= Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
-        widget.userPercistence['first_name']+' '+widget.userPercistence['last_name'],
+        User.first_name+' '+User.last_name,
         style: TextStyle(color: Colores.primaryColor,
             fontSize: 30
         ),
@@ -71,9 +66,9 @@ class _perfilPage extends State<perfilPage> {
     var usernameUser= Container(
       margin: EdgeInsets.only(top: 1),
       child: Text(
-        widget.userPercistence['username'],
+        User.username,
         style: TextStyle(
-            color: Colors.grey,
+          color: Colors.grey,
         ),
         textAlign: TextAlign.center,
       ),
@@ -81,7 +76,7 @@ class _perfilPage extends State<perfilPage> {
     var emailUser= Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
-        widget.userPercistence['email'],
+        User.email,
         style: TextStyle(color: Colors.blue),
         textAlign: TextAlign.center,
       ),
@@ -90,9 +85,9 @@ class _perfilPage extends State<perfilPage> {
       margin: EdgeInsets.only(top: 10),
       child: RaisedButton.icon(
           icon: Icon(Icons.edit),
-          label: Text('Editar Perfil'),
+          label: Text('Editar Contraseña'),
           onPressed: (){
-            _editPerfil();
+            showEditPasswor();
           }
       ),
     );
@@ -140,7 +135,8 @@ class _perfilPage extends State<perfilPage> {
     );
   }
 
-  void _editPerfil() {
-    PerfilWidget().showCambiarPerfil(context, widget.userPercistence);
+  showEditPasswor() async{
+    PerfilWidget().showEditPasswor(context);
   }
+
 }

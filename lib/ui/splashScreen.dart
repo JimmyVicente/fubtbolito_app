@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> with signinController{
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(milliseconds: 800), _onShowLogin);
+    _timer = Timer(const Duration(milliseconds: 100), _onShowLogin);
 
   }
 

@@ -6,8 +6,6 @@ import 'package:futbolito_app/ui/globales/widget.dart';
 import 'package:futbolito_app/ui/reservation/reservationMadePage.dart';
 import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 class ReservationPage extends StatefulWidget {
-  final userPercistence;
-  ReservationPage(this.userPercistence);
 
   @override
   _ReservationPageState createState() => _ReservationPageState();
@@ -62,7 +60,7 @@ class _ReservationPageState extends State<ReservationPage> {
     );
     return Scaffold(
       appBar: _appBar,
-      drawer: DrawerPage.drawer(context, widget.userPercistence),
+      drawer: DrawerPage.drawer(context),
       body: Stack(
         children: [
           Widgets.wallpaper,
@@ -90,7 +88,7 @@ class _ReservationPageState extends State<ReservationPage> {
     );
   }
   Widget reservationMade(String image, String _title, String _date, String _hour, String _direccion){
-    final _IconButtomActions =Row(
+    final iconButtomActions =Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         IconButton(
@@ -170,7 +168,7 @@ class _ReservationPageState extends State<ReservationPage> {
           ),
           child: Stack(
             children: <Widget>[
-              _IconButtomActions,
+              iconButtomActions,
               _Container
             ],
           ),

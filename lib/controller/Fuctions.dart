@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class Fuctions{
 
@@ -78,6 +80,30 @@ class Fuctions{
     prefs.remove('ip');
     String sesion =prefs.getString('ip') ?? null;
     return sesion;
+  }
+
+  formatTimeString(TimeOfDay time){
+    String Time='';
+    if(time.hour<10){
+      Time=Time+'0${time.hour}:';
+    }else{
+      Time=Time+'${time.hour}:';
+    }
+    if(time.minute<10){
+      Time=Time+'0${time.minute}:';
+    }else{
+      Time=Time+'${time.minute}:';
+    }
+    Time=Time+'00';
+    return Time;
+  }
+  formatTimeOfDay(String time){
+    var timeData=time.split(':');
+    TimeOfDay Time=TimeOfDay(hour: int.parse(timeData[0]), minute: int.parse(timeData[1]));
+    return Time;
+  }
+  formatDateString(DateTime date){
+    return  DateFormat('yyyy-MM-dd').format(date);
   }
 
 }
