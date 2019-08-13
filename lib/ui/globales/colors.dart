@@ -38,5 +38,15 @@ class Colores {
     ],
   );
 
+  static final gradientBlueGreen= LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    stops: [-0.8, 0.8],
+    colors: [
+      Colors.blue,
+      Colors.green,
+    ],
+  );
+
 
 }

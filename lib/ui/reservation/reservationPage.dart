@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:futbolito_app/controller/reservaController.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/drawer.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
@@ -12,6 +13,11 @@ class ReservationPage extends StatefulWidget {
 }
 
 class _ReservationPageState extends State<ReservationPage> {
+
+  Future<Map> loadData() async {
+    var response = await reservaController().getReservaUser();
+    return response[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +108,7 @@ class _ReservationPageState extends State<ReservationPage> {
       ],
     );
 
-    final _Container= Container(
+    final container= Container(
         padding: EdgeInsets.only(left: 20, bottom: 20, right: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -169,7 +175,7 @@ class _ReservationPageState extends State<ReservationPage> {
           child: Stack(
             children: <Widget>[
               iconButtomActions,
-              _Container
+              container
             ],
           ),
         ),

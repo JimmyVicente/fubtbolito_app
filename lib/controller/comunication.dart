@@ -1,7 +1,7 @@
 import 'dart:io';
 
 class Comunication{
-  static String IP= '192.168.0.15';
+  static String IP= '192.168.90.178';
   static String IP_CONEXION= "http://"+IP+ "/api";
 
   static final Map<String, String> headersPost = {

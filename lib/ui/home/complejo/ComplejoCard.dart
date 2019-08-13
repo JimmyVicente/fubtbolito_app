@@ -43,7 +43,7 @@ class ComplejoCard extends StatelessWidget {
         ),
       ),
     );
-    final _puntuacion =Container(
+    final puntuacion =Container(
       margin: EdgeInsets.only(top: 10, right: 50, left: 50),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +88,7 @@ class ComplejoCard extends StatelessWidget {
           ],
         )
     );
-    final _Image=Container(
+    final image=Container(
       height: 150,
       width: MediaQuery.of(context).size.width,
       decoration:  BoxDecoration(
@@ -113,7 +113,7 @@ class ComplejoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _TitleComplejo,
-              _puntuacion,
+              puntuacion,
               _Phone,
               _Adress
             ],
@@ -178,7 +178,7 @@ class ComplejoCard extends StatelessWidget {
         child: Column(
             children: [
               InkWell(
-                child: _Image,
+                child: image,
                 onTap: (){
                   Navigator.push(context, CupertinoPageRoute(
                       builder: (BuildContext context)=> CanchaPage(dataComplejo)

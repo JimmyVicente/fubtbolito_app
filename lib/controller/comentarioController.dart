@@ -30,12 +30,12 @@ class comentarioController {
     }
   }
 
-  Future<dynamic> postComentario(int complejo, String comentario, ) async {
+  Future<dynamic> postComentario(int complejo, String comentario, int punt, ) async {
     var parameters= json.encode({
       "usuario": User.id,
       "complejo": complejo,
       "comentario": comentario,
-      "puntuacion_usuario": 5,
+      "puntuacion_usuario": punt,
       "suscripcion": false
     });
     final coneccionInternet = await Fuctions().verificarConecionInternet();
