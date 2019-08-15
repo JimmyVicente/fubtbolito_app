@@ -9,7 +9,7 @@ class canchaController {
 
   BaseApi _baseApi = new BaseApi();
 
-  static final url= Comunication.IP_CONEXION+'/canchas/?complejo=';
+  static final url= Comunication.ip_conexion+'/canchas/?complejo=';
   static final headerGet= Comunication.headersGet;
 
 

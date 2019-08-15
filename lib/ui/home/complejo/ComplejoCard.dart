@@ -156,18 +156,6 @@ class ComplejoCard extends StatelessWidget {
                 }
             ),
           ),
-          Expanded(
-              child: IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.solidStickyNote,
-                    color: Colores.primaryColor,
-                  ),
-                  focusColor: Colors.green,
-                  onPressed: (){
-
-                  }
-              )
-          ),
         ],
       ),
     );

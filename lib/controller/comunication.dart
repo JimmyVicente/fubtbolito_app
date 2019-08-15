@@ -1,13 +1,13 @@
 import 'dart:io';
 
 class Comunication{
-  static String IP= '192.168.90.178';
-  static String IP_CONEXION= "http://"+IP+ "/api";
+  static String ip= '10.20.57.153:8000';
+  static String ip_conexion= "http://"+ip+ "/api";
 
   static final Map<String, String> headersPost = {
     "content-type": "application/json",
     "accept": "application/json",
-    HttpHeaders.authorizationHeader: "Basic amx2aWNlbnRlOjE1MjM="
+    HttpHeaders.authorizationHeader: "Basic QWxiZXJ0OmFsYmVydDEyMw=="
   };
 
   static final Map<String, String> headersGet = {

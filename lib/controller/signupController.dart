@@ -2,14 +2,13 @@ import 'dart:convert';
 import 'package:futbolito_app/controller/comunication.dart';
 import 'package:futbolito_app/controller/Fuctions.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 
 
 import 'base_api.dart';
 
 class registerController{
 
-   String Url = Comunication.IP_CONEXION+ '/users/';
+   String Url = Comunication.ip_conexion+ '/users/';
    final headersPost = Comunication.headersPost;
    static final headerGet= Comunication.headersGet;
 

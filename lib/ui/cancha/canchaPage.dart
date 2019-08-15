@@ -432,7 +432,7 @@ class _CanchaPageState extends State<CanchaPage> {
           ),
         ));
 
-    final _Image = Container(
+    final image = Container(
         width: 220,
         height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
@@ -469,7 +469,7 @@ class _CanchaPageState extends State<CanchaPage> {
     return Container(
       margin: EdgeInsets.only(right: 12),
       child: InkWell(
-        child: _Image,
+        child: image,
         onTap: () {
           selectCancha(data, i);
         },

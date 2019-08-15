@@ -13,7 +13,7 @@ class reservaController {
 
   BaseApi _baseApi = new BaseApi();
 
-  static String Url= Comunication.IP_CONEXION+'/reservas/';
+  static String Url= Comunication.ip_conexion+'/reservas/';
   final headersPost = Comunication.headersPost;
   final headerGet = Comunication.headersGet;
 
@@ -78,6 +78,7 @@ class reservaController {
       return true;
     }
 
+
     for(int i=0; i<reservas.length; i++){
       if(reservas[i]['estado_reserva']==true){
         if(reservas[i]['cancha']==idCancha){
@@ -85,6 +86,8 @@ class reservaController {
         }
       }
     }
+
+    
 
     if(resCancha.length!=0){
       for(int i=0; i<resCancha.length; i++){
@@ -97,7 +100,8 @@ class reservaController {
           return true;
         }
       }
-
+    }else{
+      return true;
     }
 
   }
@@ -105,7 +109,7 @@ class reservaController {
 
 
 
-  Future<String> postReserva(int idUser,int idCancha, DateTime date,TimeOfDay startTime, TimeOfDay endTime, double valorU, double valorT) async {
+  Future<dynamic> postReserva(int idUser,int idCancha, DateTime date,TimeOfDay startTime, TimeOfDay endTime, double valorU, double valorT) async {
     var parameters= json.encode({
       "usuario": idUser,
       "cancha": idCancha,
@@ -118,8 +122,9 @@ class reservaController {
     });
     final coneccionInternet = await Fuctions().verificarConecionInternet();
     if(coneccionInternet){
-      http.Response response = await http.post(Url, body: parameters, headers: headersPost);
-      return response.body;
+      final response= await _baseApi.post(Url, headersPost, parameters);
+      print(response);
+      return response;
     }else{
       return 'No Hay conexión a internet :(';
     }

@@ -7,7 +7,7 @@ class complejoController {
 
   BaseApi _baseApi = new BaseApi();
 
-  static final url= Comunication.IP_CONEXION+'/complejos';
+  static final url= Comunication.ip_conexion+'/complejos';
   static final headerGet= Comunication.headersGet;
 
   static final Map<String, String> headers = {

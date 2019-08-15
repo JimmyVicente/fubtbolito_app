@@ -12,7 +12,7 @@ class signinController {
 
   BaseApi _baseApi = new BaseApi();
 
-  static String Url= Comunication.IP_CONEXION+'/users/';
+  static String Url= Comunication.ip_conexion+'/users/';
   static final headerGet= Comunication.headersGet;
 
   parameters(String usuario){

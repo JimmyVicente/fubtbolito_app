@@ -49,13 +49,6 @@ class DrawerPage {
             },
           ),
           ListTile(
-            leading: Icon(Icons.book),
-            title: Text("Reservas"),
-            onTap: (){
-
-            },
-          ),
-          ListTile(
             leading: Icon(Icons.info),
             title: Text("Acerca de"),
             onTap: (){

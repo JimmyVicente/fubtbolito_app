@@ -9,7 +9,7 @@ class comentarioController {
 
   BaseApi _baseApi = new BaseApi();
 
-  static final Url= Comunication.IP_CONEXION+'/suscripcion/';
+  static final Url= Comunication.ip_conexion+'/suscripcion/';
   final headersPost = Comunication.headersPost;
   static final headerGet= Comunication.headersGet;
 
@@ -30,13 +30,13 @@ class comentarioController {
     }
   }
 
-  Future<dynamic> postComentario(int complejo, String comentario, int punt, ) async {
+  Future<dynamic> postComentario(int complejo, String comentario, int punt, bool sub, ) async {
     var parameters= json.encode({
       "usuario": User.id,
       "complejo": complejo,
       "comentario": comentario,
       "puntuacion_usuario": punt,
-      "suscripcion": false
+      "suscripcion": sub
     });
     final coneccionInternet = await Fuctions().verificarConecionInternet();
     if(coneccionInternet){
