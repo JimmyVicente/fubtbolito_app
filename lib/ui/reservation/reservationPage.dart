@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:futbolito_app/controller/reservaController.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
 import 'package:futbolito_app/ui/globales/drawer.dart';
 import 'package:futbolito_app/ui/globales/widget.dart';
+import 'package:futbolito_app/ui/home/mapa/mapaPage.dart';
 import 'package:futbolito_app/ui/reservation/reservationMadePage.dart';
 import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
 
@@ -17,13 +19,11 @@ class _ReservationPageState extends State<ReservationPage> {
   bool _isLoadingServices = true;
 
   Future loadData() async {
-    var response = await reservaController().getReservaUser();
-    if (response[0]['usuario'] != '-1') {
-      setState(() {
-        reserva = response;
-        _isLoadingServices=false;
-      });
-    }
+    var response= await reservaController().getReservaUser();
+    setState(() {
+      reserva = response;
+      _isLoadingServices=false;
+    });
   }
 
   @override
@@ -74,16 +74,33 @@ class _ReservationPageState extends State<ReservationPage> {
         ],
       ),
     );
+    var erroInternet=Center(
+      child: Text(
+        'No hay Conexión a internet :(',
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 20
+        ),
+      ),
+    );
+    var nullReservas=Center(
+      child: Text(
+        'No ha registro de reservas',
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 20
+        ),
+      ),
+    );
     var listaReserva = Container(
       child: ScrollConfiguration(
         behavior: HiddenScrollBehavior(),
-        child: _isLoadingServices?Center(child: CircularProgressIndicator(),):
-        ListView.builder(
+        child: ListView.builder(
           shrinkWrap: true,
           itemCount: reserva == null ? 0 : reserva.length,
           padding: EdgeInsets.all(20),
           itemBuilder: (BuildContext context, int i) {
-            return reservationMade(reserva[i]);
+            return reservaMode(reserva[i]);
           },
         ),
       ),
@@ -92,13 +109,19 @@ class _ReservationPageState extends State<ReservationPage> {
       appBar: _appBar,
       drawer: DrawerPage.drawer(context),
       body: Stack(
-        children: [Widgets.wallpaper, listaReserva],
+        children: [
+          Widgets.wallpaper,
+          this._isLoadingServices?Center(child: CircularProgressIndicator(),):
+          this.reserva[0]['usuario']=='-1'?erroInternet :
+          this.reserva[0]['usuario']=='-2'?nullReservas :
+          listaReserva
+        ],
       ),
     );
   }
 
-  Widget reservationMade(Map data) {
-    final iconButtomActions = Row(
+  Widget reservaMode(Map data){
+    var iconButtomActions = Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         IconButton(
@@ -115,67 +138,163 @@ class _ReservationPageState extends State<ReservationPage> {
             onPressed: () {})
       ],
     );
-
-    final container = Container(
-        padding: EdgeInsets.only(left: 20, bottom: 20, right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                data['fecha_reserva'],
-                style: TextStyle(color: Colores.primaryColor, fontSize: 15),
+    var titleComplejo=Container(
+      child: Text(data['complejo']['nombre_complejo'],
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colores.primaryColor,
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+        ),
+      ),
+    );
+    var titleCancha =Container(
+      margin: EdgeInsets.only(top: 2, right: 50, left: 50),
+      child:Column(
+        children: <Widget>[
+          Widgets.titleStyleinfo('CANCHA RESERVADA'),
+          Container(
+            child: Text(data['cancha']['descripcion_cancha'],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
               ),
             ),
+          )
+        ],
+      )
+    );
+    var date= Container(
+        margin: EdgeInsets.only(right: 10),
+        child: Column(
+          children: <Widget>[
+            Widgets.titleStyleinfo('FECHA DE ASISTENCIA'),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.only(right: 1),
                   child: Icon(
-                    CupertinoIcons.collections,
-                    color: Colores.primaryColor,
+                    FontAwesomeIcons.calendarAlt,
+                    color: Colors.white,
                     size: 15,
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 5),
+                  margin: EdgeInsets.only(right: 2),
                   child: Text(
                     data['fecha_reserva'],
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(right: 1),
-                  child: Icon(
-                    CupertinoIcons.time,
-                    color: Colores.primaryColor,
-                    size: 15,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 5),
-                  child: Text(
-                    data['hora_inicio'],
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 1),
-                  child: Icon(
-                    CupertinoIcons.time,
-                    color: Colores.primaryColor,
-                    size: 15,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 5),
-                  child: Text(
-                    data['hora_fin'],
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                ),
               ],
+            ),
+          ],
+        )
+    );
+    var timeStart= Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 2),
+            child: Widgets.titleStyleinfo('HORA INICO'),
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 1),
+                child: Icon(
+                  FontAwesomeIcons.clock,
+                  color: Colors.white,
+                  size: 15,
+                ),
+              ),
+              Container(
+                child: Text(
+                  data['hora_inicio'],
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+    var timeEnd= Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Widgets.titleStyleinfo('HORA FINALIZACIÓN'),
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 1),
+                child: Icon(
+                  FontAwesomeIcons.clock,
+                  color: Colors.white,
+                  size: 15,
+                ),
+              ),
+              Container(
+                child: Text(
+                  data['hora_fin'],
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                ),
+              ),
+            ],
+          )
+        ],
+      )
+    );
+    var dateTime = Container(
+        margin: EdgeInsets.only(top: 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            date,
+            timeStart,
+            timeEnd,
+          ],
+        )
+    );
+    var valorUnitario= Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 2),
+            child: Widgets.titleStyleinfo('VALOR UNITARIO'),
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 1),
+                child: Icon(
+                  Icons.monetization_on,
+                  color: Colors.white,
+                  size: 15,
+                ),
+              ),
+              Container(
+                child: Text(
+                  data['valor_unitario'],
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+    var valorTotal= Container(
+        margin: EdgeInsets.only(right: 10),
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Widgets.titleStyleinfo('VALOR TOTAL'),
             ),
             Row(
               children: <Widget>[
@@ -183,27 +302,11 @@ class _ReservationPageState extends State<ReservationPage> {
                   margin: EdgeInsets.only(right: 1),
                   child: Icon(
                     Icons.monetization_on,
-                    color: Colores.primaryColor,
+                    color: Colors.white,
                     size: 15,
                   ),
                 ),
                 Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    data['valor_unitario'],
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 1, left: 2),
-                  child: Icon(
-                    Icons.monetization_on,
-                    color: Colores.primaryColor,
-                    size: 15,
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
                   child: Text(
                     data['valor_total'],
                     style: TextStyle(color: Colors.white, fontSize: 10),
@@ -212,29 +315,92 @@ class _ReservationPageState extends State<ReservationPage> {
               ],
             )
           ],
-        ));
+        )
+    );
+    var valor = Container(
+      margin: EdgeInsets.only(top: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            valorUnitario,
+            valorTotal,
+          ],
+        )
+    );
+    var comoLlegar= Container(
+      margin: EdgeInsets.only(top: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+
+            Column(
+              children: <Widget>[
+                Container(
+                  child: Widgets.titleStyleinfo('MAPA'),
+                ),
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.map,
+                    color: Colores.primaryColor,
+                  ),
+                  onPressed: (){
+                    OverlayEntry overlayEntry;
+                    overlayEntry = OverlayEntry(builder: (c) {
+                      return MapaComplejo(data['complejo'], onClose: () => overlayEntry.remove());
+                    });
+                    Overlay.of(context).insert(overlayEntry);
+                  },
+                )
+              ],
+            )
+          ],
+        )
+    );
+    var bodyReserva=Container(
+      height: 190,
+      width: MediaQuery.of(context).size.width,
+      decoration:  BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          border: Border.all(color: Colors.blue),
+          gradient: Colores.primaryGradient,
+          image: data['cancha']['foto_cancha']!=null?
+          DecorationImage(
+              image: NetworkImage(data['cancha']['foto_cancha']),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.darken)
+          ):
+          DecorationImage(
+              image: AssetImage('assets/images/canchaFutbol.png'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.darken)
+          )
+      ),
+      child: Stack(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              titleComplejo,
+              titleCancha,
+              dateTime,
+              valor,
+              comoLlegar
+            ],
+          ),
+        ],
+      ),
+    );
 
     return InkWell(
-      child: Container(
-        padding: EdgeInsets.only(bottom: 12),
-        child: Container(
-          height: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(
-                  'https://concepto.de/wp-content/uploads/2015/02/futbol-1-e1550783405750.jpg'),
-              fit: BoxFit.cover,
-              colorFilter: new ColorFilter.mode(
-                  Colors.black.withOpacity(0.35), BlendMode.luminosity),
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Stack(
-            children: <Widget>[iconButtomActions, container],
-          ),
-        ),
+      child: Card(
+        margin: EdgeInsets.only(bottom: 12),
+        child: bodyReserva,
       ),
-      onTap: () {},
+      onTap: (){
+
+      },
     );
   }
+  
+
 }

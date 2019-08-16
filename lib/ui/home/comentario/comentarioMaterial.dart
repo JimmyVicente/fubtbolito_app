@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:futbolito_app/controller/comentarioController.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
+import 'package:futbolito_app/ui/globales/widget.dart';
 
 class Comentario extends StatefulWidget {
   final VoidCallback onClose;
@@ -26,10 +27,28 @@ class ComentarioState extends State<Comentario>
   List<Widget> starsBtn;
   int punt = 5;
   bool sub=false;
+  Map resUserComHecho=null;
 
   Future getDataComentario() async {
-    var response =
-        await comentarioController().getComentario(widget.data['id']);
+    resUserComHecho = await comentarioController().getUserComentario(widget.data['id']);
+    if(resUserComHecho!=null){
+      controllerComentario = TextEditingController(text: resUserComHecho['comentario'].toString());
+      punt= resUserComHecho['puntuacion_usuario'];
+      starsBtn = [];
+      for (int i = 1; i <= 5; i++) {
+        if (i <= punt) {
+          starsBtn.add(
+            starBtnPuntuacion(i, true),
+          );
+        } else {
+          starsBtn.add(
+            starBtnPuntuacion(i, false),
+          );
+        }
+      }
+      sub=resUserComHecho['suscripcion'];
+    }
+    var response = await comentarioController().getComentario(widget.data['id']);
     if (response != null) {
       setState(() {
         comentario = response;
@@ -44,15 +63,24 @@ class ComentarioState extends State<Comentario>
 
   Future sendComentario() async {
     if (_formKey.currentState.validate()) {
-      var response = await comentarioController()
-          .postComentario(widget.data['id'], controllerComentario.text, punt, sub);
+      Widgets().showDialogLoading(context);
+      var response= await comentarioController()
+          .saveUpdateComentario(widget.data['id'], controllerComentario.text, punt, sub, resUserComHecho);
       if (response['comentario'] != null) {
-        setState(() {
-          comentario.add(response);
-        });
+        if(response['actualizar']!=null){
+          setState(() {
+            comentario[0]=response;
+          });
+        }else{
+          setState(() {
+            comentario.add(response);
+          });
+        }
+
         controllerComentario.clear();
         FocusScope.of(context).requestFocus(new FocusNode());
       }
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 
@@ -105,55 +133,68 @@ class ComentarioState extends State<Comentario>
     );
     var listaComentarios = Container(
       padding: EdgeInsets.all(20),
-      child: this._isLoadingServices
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : comentario.length == 0
-              ? nullCom
-              : ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: comentario == null ? 0 : comentario.length,
-                  itemBuilder: (BuildContext context, int i) {
-                    return comentarioInfo(comentario[i]);
-                  },
-                ),
+      child:  comentario.length == 0 ? nullCom
+          : ListView.builder(
+        shrinkWrap: true,
+        itemCount: comentario == null ? 0 : comentario.length,
+        itemBuilder: (BuildContext context, int i) {
+          if(i==0 && resUserComHecho!=null){
+            return comentarioInfo(comentario[i], Colors.red);
+          }else{
+            return comentarioInfo(comentario[i], Colors.blue);
+          }
+        },
+      ),
     );
     var puntuacion = Container(
-      margin: EdgeInsets.only(left: 20, right: 20, bottom: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
         children: <Widget>[
-          Expanded(
-            child: Row(
+          Container(
+              child:Text(
+                'CALIFICA AL COMPLEJO DEPORTIVO',
+                style: TextStyle(
+                    color: Colors.blue
+                ),
+              )
+          ),
+          Row(
             children: starsBtn,
           ),
-          ),
-          Expanded(
-            child: Container(
-              child: IconButton(
-                icon: sub?
-                Icon(
-                  Icons.notifications_active,
+          Container(
+            child: IconButton(
+              icon: sub?
+              Icon(
+                Icons.notifications_active,
                 color: Colors.green,
-                ):
-                Icon(Icons.notifications),
-                onPressed: (){
-                  setState(() {
-                   if(sub){
-                     sub=false;
-                   }else{
-                     sub=true;
-                   } 
-                  });
-                },
-              ),
+              ):
+              Icon(Icons.notifications),
+              onPressed: (){
+                setState(() {
+                  if(sub){
+                    sub=false;
+                  }else{
+                    sub=true;
+                  }
+                });
+              },
+            ),
           ),
+          Container(
+            child: sub?Text(
+              'SUSCRIBIRSE',
+              style: TextStyle(
+                color: Colors.green
+              ),
+            ):
+            Text(
+                'SUSCRIBIRSE',
+            )
           )
         ],
       ),
     );
     var textFielComentario = Container(
+      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 2),
       child: Form(
         key: _formKey,
         child: TextFormField(
@@ -167,18 +208,18 @@ class ComentarioState extends State<Comentario>
             return null;
           },
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              suffixIcon: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () {
-                  sendComentario();
-                },
-              )),
+            border: OutlineInputBorder(),
+            suffixIcon: IconButton(
+              icon: Icon(Icons.send),
+              onPressed: () {
+                sendComentario();
+              },
+            ),
+          ),
         ),
       ),
     );
     var btnSendComentario = Container(
-        padding: EdgeInsets.all(20),
         alignment: Alignment.bottomCenter,
         child: Column(
           children: <Widget>[puntuacion, textFielComentario],
@@ -193,7 +234,18 @@ class ComentarioState extends State<Comentario>
               color: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0))),
-          child: Column(
+          child: this._isLoadingServices ?
+          Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  appBar
+                ],
+              ),
+              Center(child: CircularProgressIndicator())
+            ],
+          ):
+          Column(
             children: <Widget>[
               appBar,
               Expanded(child: listaComentarios),
@@ -205,7 +257,7 @@ class ComentarioState extends State<Comentario>
     );
   }
 
-  Widget comentarioInfo(Map comentario) {
+  Widget comentarioInfo(Map comentario, Color color) {
     final startPaint = Expanded(
       child: Icon(
         FontAwesomeIcons.solidStar,
@@ -231,6 +283,12 @@ class ComentarioState extends State<Comentario>
     var puntuacion = Container(
       child: Column(
         children: <Widget>[
+          Container(
+            child: Text(
+              comentario['usuario']['first_name'] +' '+comentario['usuario']['last_name'],
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: stars),
           Container(
             child: Text(
@@ -249,7 +307,7 @@ class ComentarioState extends State<Comentario>
         ),
         subtitle: Text(
           comentario['fecha_creacion'],
-          style: TextStyle(color: Colors.grey[50], fontWeight: FontWeight.w100),
+          style: TextStyle(color: Colors.grey[50], fontWeight: FontWeight.w100, fontSize: 11),
         ),
       ),
     );
@@ -257,7 +315,9 @@ class ComentarioState extends State<Comentario>
       padding: EdgeInsets.all(1),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
-          gradient: Colores.gradientBlueGreen),
+          gradient: Colores.gradientBlueGreen,
+        border: Border.all(color: color, width: 2)
+      ),
       margin: EdgeInsets.all(2),
       child: Row(
         children: <Widget>[
@@ -275,29 +335,31 @@ class ComentarioState extends State<Comentario>
 
   Widget starBtnPuntuacion(int i, bool activate) {
     return Expanded(
-        child: IconButton(
-      icon: Icon(
-        activate ? FontAwesomeIcons.solidStar : FontAwesomeIcons.star,
-        color: Colores.colorYellow,
-        size: 30,
-      ),
-      onPressed: () {
-        setState(() {
-          punt = i;
-          starsBtn = [];
-          for (int i = 1; i <= 5; i++) {
-            if (i <= punt) {
-              starsBtn.add(
-                starBtnPuntuacion(i, true),
-              );
-            } else {
-              starsBtn.add(
-                starBtnPuntuacion(i, false),
-              );
+      child: IconButton(
+        icon: Icon(
+          activate ? FontAwesomeIcons.solidStar : FontAwesomeIcons.star,
+          color: Colores.colorYellow,
+          size: 30,
+        ),
+        onPressed: () {
+          setState(() {
+            punt = i;
+            starsBtn = [];
+            for (int i = 1; i <= 5; i++) {
+              if (i <= punt) {
+                starsBtn.add(
+                  starBtnPuntuacion(i, true),
+                );
+              } else {
+                starsBtn.add(
+                  starBtnPuntuacion(i, false),
+                );
+              }
             }
-          }
-        });
-      },
-    ));
+          },
+          );
+        },
+      ),
+    );
   }
 }

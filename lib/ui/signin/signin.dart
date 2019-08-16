@@ -252,7 +252,6 @@ class _SignInPageWidgetState extends State<SignInPageWidget> with signinControll
       ),
     );
 
-
     var dontHaveAnAccount = Container(
       margin: EdgeInsets.only(top: 26),
       height: 17,
@@ -311,8 +310,8 @@ class _SignInPageWidgetState extends State<SignInPageWidget> with signinControll
                   errorMessage,
                   signInButton,
                   forgotPassword,
-                  firstSignInSeparator,
-                  SignInButton,
+                  //firstSignInSeparator,
+                 // SignInButton,
                   dontHaveAnAccount
                 ],
               ),

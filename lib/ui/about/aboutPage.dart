@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:futbolito_app/ui/globales/colors.dart';
 
 class aboutPage extends StatefulWidget {
   @override
@@ -9,7 +10,8 @@ class _aboutPage extends State<aboutPage> {
   @override
   Widget build(BuildContext context) {
     final _appBar=  AppBar(
-        title: Text('Acerca de')
+        title: Text('Acerca de'),
+      backgroundColor: Colores.primaryColor,
     );
     final _title= Container(
       padding: EdgeInsets.only(top:40),

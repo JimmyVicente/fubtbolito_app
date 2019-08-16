@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:futbolito_app/controller/userController.dart';
 import 'package:futbolito_app/ui/globales/Alerts.dart';
 import 'package:futbolito_app/ui/globales/colors.dart';
+import 'package:futbolito_app/ui/globales/widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PerfilWidget {
@@ -105,14 +106,18 @@ class PerfilWidget {
             ),
             onPressed: () async{
               if (_formKey.currentState.validate()) {
-                var response= await userController().putDataUser(
+                Widgets().showDialogLoading(context);
+                var response= await userController().putDataUserPassword(
                     controllerPassword1.text,
                     controllerPassword2.text,
                   controllerPassword3.text,
                 );
-                if(response=='editado'){
+                Navigator.of(context,rootNavigator: true).pop();
+                if(response!=null){
                   Navigator.of(context,rootNavigator: true).pop();
                   AlertWidget().showEditSuccess(context, "Se modificó correctamente");
+                }else{
+
                 }
               }
             },

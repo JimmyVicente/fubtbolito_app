@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:futbolito_app/ui/globales/ui/blur_background.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'colors.dart';
 
@@ -70,27 +71,32 @@ class Widgets  {
   }
 
   showDialogLoading(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            title: Column(
-              children: <Widget>[
-                Text('Espere..', textAlign: TextAlign.center, style: TextStyle(color: Colores.primaryColor),),
-                Divider(color: Colores.primaryColor,),
-              ],
-            ),
-            children: <Widget>[
-              SimpleDialogOption(
-                  child: Column(
-                    children: <Widget>[
-                      CircularProgressIndicator()
-                    ],
-                  )
-              ),
-            ],
-          );
-        });
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.shrink,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: Colors.green,
+      ),
+    );
+    Alert(
+      context: context,
+      style: alertStyle,
+      title: 'ESPERE',
+      content: Center(
+        child: CircularProgressIndicator(),
+      ),
+      buttons: [
+      ],
+    ).show();
   }
 
   void showDialogInfo(BuildContext context, String title, String body, Function function) {
@@ -130,6 +136,20 @@ class Widgets  {
             ],
           );
         });
+  }
+
+  static Widget titleStyleinfo(String title){
+    Color titleInfoReserva= Colors.green;
+    return Text(
+      title,
+      style: TextStyle(
+          color: titleInfoReserva,
+          fontSize: 8,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.italic
+      ),
+      textAlign: TextAlign.center,
+    );
   }
 
 }

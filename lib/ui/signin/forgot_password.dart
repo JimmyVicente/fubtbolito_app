@@ -1,35 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:futbolito_app/controller/userController.dart';
+import 'package:futbolito_app/ui/globales/Alerts.dart';
 import 'package:futbolito_app/ui/globales/ui/blur_background.dart';
 import 'package:futbolito_app/ui/globales/ui/hidden_scroll_behavior.dart';
-class ForgotPasswordPageWidget extends StatelessWidget {
+import 'package:futbolito_app/ui/globales/widget.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
+class ForgotPasswordPageWidget extends StatefulWidget {
+  @override
+  _ForgotPasswordPageWidgetState createState() => _ForgotPasswordPageWidgetState();
+}
+
+
+class _ForgotPasswordPageWidgetState extends State<ForgotPasswordPageWidget> {
+  final _formKey = GlobalKey<FormState>();
+  String mensaje="";
+  TextEditingController controllerUser = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     Color textFieldActiveColor = Colors.white;
     Color textFieldInactiveColor = Colors.grey;
-    
+    var errorMessage=Container(
+        margin: EdgeInsets.only(bottom: 30),
+        child: Text(mensaje, style: TextStyle(color: Colors.red),)
+    );
     var emailField = Container(
       margin: EdgeInsets.symmetric(vertical: 27.5),
-      child: TextField(
-        cursorColor: textFieldActiveColor,
-        style: TextStyle(color: textFieldActiveColor),
-        decoration: InputDecoration(
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: textFieldInactiveColor),
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: controllerUser,
+          cursorColor: textFieldActiveColor,
+          style: TextStyle(color: textFieldActiveColor),
+          validator: (text) {
+            if (text.length == 0) {
+              return "Escriba un usuario o correo";
+            } else if (text.length <= 3) {
+              return "Escriba al menos 4 caracteres";
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: textFieldInactiveColor),
+            ),
+            labelText: "Usuario/Correo",
+            labelStyle: TextStyle(color: textFieldActiveColor),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: textFieldActiveColor),
+            ),
           ),
-          labelText: "Usuario/Correo",
-          labelStyle: TextStyle(color: textFieldActiveColor),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: textFieldActiveColor),
-          ),
+          autocorrect: false,
         ),
-        autocorrect: false,
-      ),
+      )
     );
     var forgotPasswordButton = Container(
       height: 55,
       child: FlatButton(
-        onPressed: () {},
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
@@ -42,6 +69,20 @@ class ForgotPasswordPageWidget extends StatelessWidget {
           "Recuperar Contraseña",
           textAlign: TextAlign.center,
         ),
+        onPressed: () async{
+          if (_formKey.currentState.validate()) {
+            Widgets().showDialogLoading(context);
+           var response= await userController().sendCorreo(controllerUser.text);
+           Navigator.of(context, rootNavigator: true).pop();
+           if(response=='enviado'){
+             AlertWidget().showEditSuccessRegresar(context, 'Se envió una contraseña temporal a tu correo electrónico, Recuerdad cambiar la contraseña para mas seguridad');
+           }else{
+             setState(() {
+               mensaje = response.toString();
+             });
+           }
+          }
+        },
       ),
     );
     var dontHaveAnAccount = Container(
@@ -107,6 +148,7 @@ class ForgotPasswordPageWidget extends StatelessWidget {
                     ),
                   ),
                   emailField,
+                  errorMessage,
                   forgotPasswordButton,
                   dontHaveAnAccount
                 ],

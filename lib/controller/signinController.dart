@@ -33,7 +33,6 @@ class signinController {
       }else{
         url= Url+'?username=';
       }
-      print(url+user);
       final response = await _baseApi.get(url+user, headerGet);
       if(response['count']!=0){
         String passwordResponse =response['results'][0]['password'];

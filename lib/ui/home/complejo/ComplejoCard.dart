@@ -121,65 +121,15 @@ class ComplejoCard extends StatelessWidget {
         ],
       ),
     );
-    var rowComentario= Container(
-      padding: EdgeInsets.only(right: 50, left: 50),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.locationArrow,
-                  color: Colores.primaryColor,
-                ),
-                onPressed: (){
-                  //mapaAlert().verMapa(dataComplejo, context);
-                  OverlayEntry overlayEntry;
-                  overlayEntry = OverlayEntry(builder: (c) {
-                    return MapaComplejo(dataComplejo, onClose: () => overlayEntry.remove());
-                  });
-                  Overlay.of(context).insert(overlayEntry);
-                }
-            ),
-          ),
-          Expanded(
-            child: IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.comment,
-                  color: Colores.primaryColor,
-                ),
-                onPressed: (){
-                  OverlayEntry overlayEntry;
-                  overlayEntry = OverlayEntry(builder: (c) {
-                    return Comentario(dataComplejo, onClose: () => overlayEntry.remove());
-                  });
-                  Overlay.of(context).insert(overlayEntry);
-                }
-            ),
-          ),
-        ],
-      ),
-    );
 
-    var bodyComplejo= Container(
-      margin: EdgeInsets.only(bottom: 12),
-      child: Card(
-        child: Column(
-            children: [
-              InkWell(
-                child: image,
-                onTap: (){
-                  Navigator.push(context, CupertinoPageRoute(
-                      builder: (BuildContext context)=> CanchaPage(dataComplejo)
-                  ));
-                },
-              ),
-              rowComentario
-            ]
-        ),
-      ),
+    return InkWell(
+      child: image,
+      onTap: (){
+        Navigator.push(context, CupertinoPageRoute(
+            builder: (BuildContext context)=> CanchaPage(dataComplejo)
+        ));
+      },
     );
-
-    return bodyComplejo;
   }
 }
 

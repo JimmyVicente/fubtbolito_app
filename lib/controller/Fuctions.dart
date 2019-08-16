@@ -97,6 +97,21 @@ class Fuctions{
     Time=Time+'00';
     return Time;
   }
+  formatTimeHourMinuteString(TimeOfDay time){
+    String Time='';
+    if(time.hour<10){
+      Time=Time+'0${time.hour}:';
+    }else{
+      Time=Time+'${time.hour}:';
+    }
+    if(time.minute<10){
+      Time=Time+'0${time.minute}';
+    }else{
+      Time=Time+'${time.minute}';
+    }
+    Time=Time+' h';
+    return Time;
+  }
   formatTimeOfDay(String time){
     var timeData=time.split(':');
     TimeOfDay Time=TimeOfDay(hour: int.parse(timeData[0]), minute: int.parse(timeData[1]));
