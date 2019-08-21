@@ -79,7 +79,7 @@ class MapaComplejoState extends State<MapaComplejo> with SingleTickerProviderSta
       body: ScaleTransition(
         scale: scaleAnimatoin,
         child: Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/4),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/8),
           decoration: ShapeDecoration(
               color: Colors.white,
               shape: RoundedRectangleBorder(

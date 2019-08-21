@@ -132,7 +132,7 @@ class ComentarioState extends State<Comentario>
       ),
     );
     var listaComentarios = Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(right: 20, left: 20),
       child:  comentario.length == 0 ? nullCom
           : ListView.builder(
         shrinkWrap: true,
@@ -153,22 +153,51 @@ class ComentarioState extends State<Comentario>
               child:Text(
                 'CALIFICA AL COMPLEJO DEPORTIVO',
                 style: TextStyle(
-                    color: Colors.blue
+                    color: Colors.blue,
+                  fontSize: 10
                 ),
               )
           ),
-          Row(
-            children: starsBtn,
+          Container(
+            margin: EdgeInsets.only(right: 50, left: 50),
+            child: Row(
+              children: starsBtn,
+            ),
           ),
           Container(
-            child: IconButton(
-              icon: sub?
-              Icon(
-                Icons.notifications_active,
-                color: Colors.green,
-              ):
-              Icon(Icons.notifications),
-              onPressed: (){
+            child: InkWell(
+             child : Column(
+               mainAxisAlignment: MainAxisAlignment.start,
+               children: <Widget>[
+                Container(
+                  child:  sub? Icon(
+                    Icons.notifications_active,
+                    color: Colors.green,
+                    size: 20,
+                  ):Icon(
+                    Icons.notifications,
+                    size: 20,
+                  ),
+                ),
+                 Container(
+                   margin: EdgeInsets.only(bottom: 2),
+                     child: sub?Text(
+                       'SUSCRITO',
+                       style: TextStyle(
+                           color: Colors.green,
+                         fontSize: 10
+                       ),
+                     ):
+                     Text(
+                       'SUSCRIBIRSE',
+                       style: TextStyle(
+                           fontSize: 10
+                       ),
+                     )
+                 )
+               ],
+             ),
+              onTap: (){
                 setState(() {
                   if(sub){
                     sub=false;
@@ -179,17 +208,6 @@ class ComentarioState extends State<Comentario>
               },
             ),
           ),
-          Container(
-            child: sub?Text(
-              'SUSCRIBIRSE',
-              style: TextStyle(
-                color: Colors.green
-              ),
-            ):
-            Text(
-                'SUSCRIBIRSE',
-            )
-          )
         ],
       ),
     );
@@ -220,7 +238,6 @@ class ComentarioState extends State<Comentario>
       ),
     );
     var btnSendComentario = Container(
-        alignment: Alignment.bottomCenter,
         child: Column(
           children: <Widget>[puntuacion, textFielComentario],
         ));
@@ -229,7 +246,7 @@ class ComentarioState extends State<Comentario>
       body: ScaleTransition(
         scale: scaleAnimatoin,
         child: Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 8),
           decoration: ShapeDecoration(
               color: Colors.white,
               shape: RoundedRectangleBorder(
@@ -339,7 +356,7 @@ class ComentarioState extends State<Comentario>
         icon: Icon(
           activate ? FontAwesomeIcons.solidStar : FontAwesomeIcons.star,
           color: Colores.colorYellow,
-          size: 30,
+          size: 20,
         ),
         onPressed: () {
           setState(() {

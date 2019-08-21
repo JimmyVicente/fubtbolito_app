@@ -57,11 +57,10 @@ class _HomePageState extends State<HomePage> {
         );
       }
     }else{
-      print(resUserComHecho);
       response= await comentarioController()
           .saveUpdateComentario(
           complejo['id'],
-          'Comentario generado al sucribirme',
+          'Me Suscribí',
           5,
           true,
           resUserComHecho

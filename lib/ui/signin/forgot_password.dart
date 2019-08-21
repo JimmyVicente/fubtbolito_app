@@ -75,7 +75,7 @@ class _ForgotPasswordPageWidgetState extends State<ForgotPasswordPageWidget> {
            var response= await userController().sendCorreo(controllerUser.text);
            Navigator.of(context, rootNavigator: true).pop();
            if(response=='enviado'){
-             AlertWidget().showEditSuccessRegresar(context, 'Se envió una contraseña temporal a tu correo electrónico, Recuerdad cambiar la contraseña para mas seguridad');
+             AlertWidget().showEditSuccessRegresar(context, 'Se envió una contraseña temporal a tu correo electrónico, Recuerda cambiar la contraseña para mas seguridad');
            }else{
              setState(() {
                mensaje = response.toString();

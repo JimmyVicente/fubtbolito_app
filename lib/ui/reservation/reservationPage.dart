@@ -357,7 +357,6 @@ class _ReservationPageState extends State<ReservationPage> {
         )
     );
     var bodyReserva=Container(
-      height: 190,
       width: MediaQuery.of(context).size.width,
       decoration:  BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
